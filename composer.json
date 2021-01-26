@@ -1,0 +1,31 @@
+{
+    "name": "hi/http",
+    "description": "Hi 框架 和他谈拍",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "热心网友",
+            "email": "anoxia@engineer.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Hi\\Http\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hi\\Http\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "hi/helpers": "dev-main",
+        "hi/server": "dev-develop",
+        "psr/http-message": "1.0.x-dev"
+    },
+    "require-dev": {
+        "swoole/ide-helper": "dev-master"
+    }
+}
