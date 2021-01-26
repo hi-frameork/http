@@ -6,6 +6,7 @@ namespace Hi\Http;
 
 use Hi\Http\Runtime\BuiltIn;
 use Hi\Server\ServerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Application
 {
@@ -36,7 +37,9 @@ class Application
 
     private function createRequestHandle()
     {
-        return function () {};
+        return function (ServerRequestInterface $request) {
+            return time();
+        };
     }
 
     private function createTaskHandle()

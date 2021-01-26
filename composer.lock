@@ -315,12 +315,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/swoole/ide-helper.git",
-                "reference": "5b36a9722eb8c693ff9831023cfb807474eab07c"
+                "reference": "62d923e3406d4d9c5a4749d810d11e2beb201abe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/5b36a9722eb8c693ff9831023cfb807474eab07c",
-                "reference": "5b36a9722eb8c693ff9831023cfb807474eab07c",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/62d923e3406d4d9c5a4749d810d11e2beb201abe",
+                "reference": "62d923e3406d4d9c5a4749d810d11e2beb201abe",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -350,9 +350,9 @@
             "description": "IDE help files for Swoole.",
             "support": {
                 "issues": "https://github.com/swoole/ide-helper/issues",
-                "source": "https://github.com/swoole/ide-helper/tree/4.6.1"
+                "source": "https://github.com/swoole/ide-helper/tree/4.6.2"
             },
-            "time": "2021-01-11T19:15:13+00:00"
+            "time": "2021-01-26T00:17:29+00:00"
         }
     ],
     "aliases": [],
