@@ -23,7 +23,9 @@
     "require": {
         "hi/helpers": "dev-main",
         "hi/server": "dev-develop",
-        "psr/http-message": "1.0.x-dev"
+        "psr/http-message": "1.0.x-dev",
+        "psr/http-server-handler": "1.0.x-dev",
+        "psr/http-server-middleware": "1.0.x-dev"
     },
     "require-dev": {
         "swoole/ide-helper": "dev-master"
