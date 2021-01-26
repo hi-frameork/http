@@ -14,6 +14,7 @@ class Swoole extends AbstructSwooleServer
 
     public function start(callable $handle, callable $taskHandle)
     {
+        $server->on('request', function())
     }
 
     public function restart()

@@ -21,6 +21,7 @@
         }
     },
     "require": {
+        "php": ">=7.4",
         "hi/helpers": "dev-main",
         "hi/server": "dev-develop",
         "psr/http-message": "1.0.x-dev",
@@ -28,6 +29,7 @@
         "psr/http-server-middleware": "1.0.x-dev"
     },
     "require-dev": {
-        "swoole/ide-helper": "dev-master"
+        "swoole/ide-helper": "dev-master",
+        "phpunit/phpunit": "10.0.x-dev"
     }
 }
