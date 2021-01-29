@@ -8,4 +8,8 @@ use Hi\Http\Message\Stream;
 
 class Memory extends Stream
 {
+    public function __construct($mode = 'rb')
+    {
+        parent::__construct('php://memory', $mode);
+    }
 }
