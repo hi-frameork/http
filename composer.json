@@ -31,5 +31,8 @@
     "require-dev": {
         "swoole/ide-helper": "dev-master",
         "phpunit/phpunit": "10.0.x-dev"
+    },
+    "scripts": {
+        "test": "php ./vendor/bin/phpunit"
     }
 }
