@@ -202,10 +202,6 @@ abstract class AbstractMessage extends AbstructCommon implements MessageInterfac
         return new Stream($body, $mode);
     }
 
-    final protected function processHeaders($headers):array
-    {
-    }
-
     final protected function processProtocol($protocal = ''): string
     {
         $protocols = [
