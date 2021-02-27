@@ -1,13 +1,10 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Hi\Http\Message;
 
-use Hi\Helpers\Exceptions\RuntimeException;
-use Hi\Helpers\StatusCode;
+use Hi\Http\Exceptions\RuntimeException;
 use Hi\Helpers\Arr;
-use Hi\Helpers\Exception;
+use Exception;
 use Psr\Http\Message\StreamInterface;
 use function is_string;
 use function is_resource;
@@ -24,67 +21,145 @@ use function stream_get_contents;
 use function stream_get_meta_data;
 use function strpbrk;
 
+/**
+ * PSR-7 Stream
+ */
 class Stream implements StreamInterface
 {
     /**
      * @var resource|null
      */
-    protected $handle;
+    protected $handle = null;
 
     /**
      * @var resource|string
      */
     protected $stream;
 
+    /**
+     * Stream constructor.
+     *
+     * @param string|resource $stream
+     * @param string $mode
+     */
     public function __construct($stream, string $mode = 'rb')
     {
         $this->setStream($stream, $mode);
     }
 
+    /**
+     * 关闭 stream
+     */
     public function __destruct()
     {
         $this->close();
     }
 
     /**
-     * {@inheritDoc}
+     * 将 stream 中所有内容以 string 方式返回
+     * 为了符合PHP的字符串转换操作，此方法不能引发异常
+     *
+     * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
+     *
+     * Warning: 如果 stream 中数据较大，将会消耗更多时间从内存加载数据
      */
-    public function __toString()
+    public function __toString(): string
     {
-        if ($this->isReadable()) {
-            if ($this->isSeekable()) {
-                $this->rewind();
-            }
+        try {
+            if ($this->isReadable()) {
+                if ($this->isSeekable()) {
+                    $this->rewind();
+                }
 
-            return $this->getContents();
-        }
+                return $this->getContents();
+            }
+        } catch (Exception $e) {}
 
         return '';
     }
 
     /**
-     * {@inheritDoc}
+     * 设置 stream
+     *
+     * @param string|resource $stream
+     * @param string $mode
+     */
+    public function setStream($stream, string $mode = 'rb'): void
+    {
+        $handle = $stream;
+
+        if (is_string($stream)) {
+            $handle = @fopen($stream, $mode);
+        }
+
+        if (! is_resource($handle) || get_resource_type($handle) !== 'stream') {
+            throw new RuntimeException('stream 不是有效的 string/resource 类型');
+        }
+
+        $this->handle = $handle;
+        $this->stream = $stream;
+    }
+
+    /**
+     * 关闭 stream 以及关联的资源
      */
     public function close()
     {
-        if ($this->handle) {
-            fclose($this->detach());
+        $handle = $this->detach();
+        if (null !== $handle) {
+            fclose($handle);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * 从 stream 中分离资源
+     * 一旦执行分离，stream 将处于不可用
+     *
+     * @return resource|null 如果存在的话，返回底层 PHP 流
      */
     public function detach()
     {
-        $handle = $this->handle;
+        $handle       = $this->handle;
         $this->handle = null;
 
         return $handle;
     }
 
     /**
-     * {@inheritDoc}
+     * 返回 stream 大小（如果可知）
+     *
+     * @return int|null
+     */
+    public function getSize()
+    {
+        if (null !== $this->handle) {
+            $stats = fstat($this->handle);
+
+            if (false !== $stats) {
+                return Arr::get($stats, 'size', null);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 返回文件读/写指针的当前位置
+     */
+    public function tell(): int
+    {
+        $this->checkHandle();
+
+        $position = ftell($this->handle);
+        if (! is_int($position)) {
+            throw new RuntimeException('无法检索指针位置');
+        }
+
+        return $position;
+    }
+
+    /**
+     * 如果指针位于 stream 末尾，返回 true
      */
     public function eof(): bool
     {
@@ -96,63 +171,67 @@ class Stream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * 返回流是否 seekable
      */
-    public function getContents(): string
+    public function isSeekable(): bool
+    {
+        return (bool) $this->getMetadata("seekable");
+    }
+
+    /**
+     * 重置 steam 指针至起始处
+     *
+     * 如果 stream 指针不可偏移，此方法将抛出异常；
+     * 否则，文件指针将会偏移至起始处
+     */
+    public function rewind(): void
+    {
+        $this->seek(0);
+    }
+
+    /**
+     * 将 handle 指针偏移至特定位置
+     */
+    public function seek($offset, $whence = SEEK_SET): void
     {
         $this->checkHandle();
-        $this->checkReadable();
+        $this->checkSeekable();
 
-        $data = stream_get_contents($this->handle);
-        if ($data !== false) {
-            return $data;
+        $seeker = fseek($this->handle, $offset, $whence);
+
+        if (0 !== $seeker) {
+            throw new RuntimeException('无法对文件指针执行偏移');
         }
-
-        throw new RuntimeException(
-            '从 file/stream 获取内容失败',
-            StatusCode::E_500000,
-            [
-                'stream' => $this->stream,
-                'data' => $data,
-            ]
-        );
     }
 
     /**
-     * {@inheritDoc}
+     * 返回流是否可写
      */
-    public function getMetadata($key = null)
+    public function isWritable(): bool
     {
-        if ($this->handle === null) {
-            return null;
-        }
-
-        $mateData = stream_get_meta_data($this->handle);
-
-        if ($key === null) {
-            return $mateData;
-        }
-
-        return Arr::get($mateData, $key, []);
+        $mode = (string) $this->getMetadata("mode");
+        return false !== strpbrk($mode, "xwca+");
     }
 
     /**
-     * {@inheritDoc}
+     * 写入数据至 stream
      */
-    public function getSize()
+    public function write($string): int
     {
-        if ($this->handle !== null) {
-            $stats = fstat($this->handle);
-            if ($stats !== false) {
-                return Arr::get($stats, 'size', null);
-            }
+        $this->checkHandle();
+        $this->checkWritable();
+
+        $bytes = fwrite($this->handle, $string);
+
+        if (false === $bytes) {
+            throw new RuntimeException('无法写入 file/stream');
         }
 
-        return null;
+        return $bytes;
     }
 
     /**
-     * {@inheritDoc}
+     * 返回 stream 是否可读
      */
     public function isReadable(): bool
     {
@@ -161,24 +240,7 @@ class Stream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function isSeekable(): bool
-    {
-        return (bool) $this->getMetadata('seekable');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isWritable(): bool
-    {
-        $mode = (string) $this->getMetadata('mode');
-        return false !== strpbrk($mode, 'xwca+');
-    }
-
-    /**
-     * {@inheritDoc}
+     * 从 stream 读取指定长度数据
      */
     public function read($length): string
     {
@@ -187,155 +249,97 @@ class Stream implements StreamInterface
 
         $data = fread($this->handle, $length);
 
-        if ($data === false) {
-            throw new RuntimeException(
-                '从 file/stream 读取数据失败',
-                StatusCode::E_500000,
-                [
-                    'stream' => $this->stream,
-                    'length' => $length,
-                ]
-            );
+        if (false === $data) {
+            throw new RuntimeException('无法读取 file/stream');
         }
 
         return $data;
     }
 
     /**
-     * {@inheritDoc}
+     * 以字符串形式返回 strean 内容
      */
-    public function rewind(): void
+    public function getContents(): string
     {
-        $this->seek(0);
+        $this->checkHandle();
+        $this->checkReadable();
+
+        $data = stream_get_contents($this->handle);
+
+        if (false === $data) {
+            throw new RuntimeException('无法从 file/stream 读取内容');
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取 stream 元数据数组或获取指定 key 对应数据
+     *
+     * @param string|null $key
+     * @return array|mixed|null
+     */
+    public function getMetadata($key = null)
+    {
+        if (null === $this->handle) {
+            return null;
+        }
+
+        // @see https://www.php.net/manual/zh/function.stream-get-meta-data.php
+        $metaData = stream_get_meta_data($this->handle);
+
+        if (null === $key) {
+            return $metaData;
+        }
+
+        return Arr::get($metaData, $key, []);
     }
     
     /**
-     * {@inheritDoc}
-     */
-    public function seek($offset, $whence = SEEK_SET): void
-    {
-        $this->checkHandle();
-        $this->checkReadable();
-
-        $seeker = fseek($this->handle, $offset, $whence);
-
-        if ($seeker !== 0) {
-            throw new RuntimeException(
-                '移动 file/stream 文件指针失败',
-                StatusCode::E_500000,
-                [
-                    'stream' => $this->stream,
-                    'offset' => $offset,
-                    'whence' => $whence,
-                ]
-            );
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function tell(): int
-    {
-        $this->checkHandle();
-
-        $position = ftell($this->handle);
-
-        if (! is_int($position)) {
-            throw new Exception(
-                '无法检索指针位置',
-                StatusCode::E_500000,
-                [
-                    'steam' => $this->handle
-                ]
-            );
-        }
-
-        return $position;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function write($string): int
-    {
-        $this->checkHandle();
-        $this->checkReadable();
-
-        $bytes = fwrite($this->handle, $string);
-
-        if ($bytes === false) {
-            throw new RuntimeException(
-                '写入 file/stream 失败',
-                StatusCode::E_500000,
-                [
-                    'string' => $string,
-                    'stream' => $this->stream,
-                ]
-            );
-        }
-
-        return $bytes;
-    }
-
-    /**
-     * 为实例设置/替换 stream
-     * @throws RuntimeException
-     */
-    public function setStream($stream, string $mode = 'rb'): void
-    {
-        $handle = $stream;
-
-        if (is_string($stream)) {
-            $handle = @fopen($stream, $mode);
-        }
-
-        if (! is_resource($handle) || get_resource_type($handle) !== 'stream') {
-            throw new RuntimeException(
-                '提供 stream 不是有效的 string/resource 类型',
-                StatusCode::E_500000,
-                [
-                    'stream' => $stream,
-                    'mode' => $mode,
-                ]
-            );
-        }
-
-        $this->handle = $handle;
-        $this->stream = $stream;
-    }
-
-    /**
-     * 检查 stream handle 有效性
+     * 检查 handle 是否可用，否则抛出异常
+     *
      * @throws RuntimeException
      */
     private function checkHandle(): void
     {
-        if ($this->handle === null) {
-            throw new RuntimeException(
-                'stream resource 为空，请检查是否正确初始化',
-                StatusCode::E_500000,
-                [
-                    'stream' => $this->stream,
-                ]
-            );
+        if (null === $this->handle) {
+            throw new RuntimeException('handle 资源无效');
         }
     }
 
     /**
-     * 检查当前 stream 资源是否可读
+     * 检查 handle 是否可读，否则抛出异常
+     *
      * @throws RuntimeException
      */
     private function checkReadable(): void
     {
-        if (! $this->isReadable()) {
-            throw new RuntimeException(
-                'stream resource 不可读',
-                StatusCode::E_500000,
-                [
-                    'steam' => $this->stream,
-                ]
-            );
+        if (true !== $this->isReadable()) {
+            throw new RuntimeException('handle 不可读');
+        }
+    }
+
+    /**
+     * 检查 handle 是否可查找，否则抛出异常
+     *
+     * @throws RuntimeException
+     */
+    private function checkSeekable(): void
+    {
+        if (true !== $this->isSeekable()) {
+            throw new RuntimeException('handle 不可查找');
+        }
+    }
+
+    /**
+     * 检查 handle 是否可写，否则抛出异常
+     *
+     * @throws RuntimeException
+     */
+    private function checkWritable(): void
+    {
+        if (true !== $this->isWritable()) {
+            throw new RuntimeException('handle 不可写');
         }
     }
 }
