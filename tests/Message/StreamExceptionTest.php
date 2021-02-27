@@ -2,7 +2,7 @@
 
 namespace Hi\Http\Tests\Message;
 
-use Hi\Helpers\Exceptions\RuntimeException;
+use Hi\Http\Exceptions\RuntimeException;
 use Hi\Helpers\StatusCode;
 use Hi\Http\Message\Stream;
 use PHPUnit\Framework\TestCase;
