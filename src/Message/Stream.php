@@ -2,7 +2,7 @@
 
 namespace Hi\Http\Message;
 
-use Hi\Http\Exceptions\RuntimeException;
+use RuntimeException;
 use Hi\Helpers\Arr;
 use Exception;
 use Psr\Http\Message\StreamInterface;
@@ -22,7 +22,9 @@ use function stream_get_meta_data;
 use function strpbrk;
 
 /**
- * PSR-7 Stream
+ * 描述数据流。
+ *
+ * 通常，实例将包装PHP流; 此接口提供了最常见操作的包装，包括将整个流序列化为字符串。
  */
 class Stream implements StreamInterface
 {
