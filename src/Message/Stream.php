@@ -6,6 +6,7 @@ use RuntimeException;
 use Hi\Helpers\Arr;
 use Exception;
 use Psr\Http\Message\StreamInterface;
+
 use function is_string;
 use function is_resource;
 use function fopen;
@@ -58,12 +59,15 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 将 stream 中所有内容以 string 方式返回
-     * 为了符合PHP的字符串转换操作，此方法不能引发异常
+     * 从头到尾将流中的所有数据读取到字符串。
+     *
+     * 这个方法 **必须** 在开始读数据前定位到流的开头，并读取出所有的数据。
+     *
+     * 警告：这可能会尝试将大量数据加载到内存中。
+     *
+     * 这个方法 **不得** 抛出异常以符合 PHP 的字符串转换操作。
      *
      * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
-     *
-     * Warning: 如果 stream 中数据较大，将会消耗更多时间从内存加载数据
      */
     public function __toString(): string
     {
@@ -128,9 +132,9 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 返回 stream 大小（如果可知）
+     * 如果可知，获取流的数据大小。
      *
-     * @return int|null
+     * @return int|null 如果可知，返回以字节为单位的大小，如果未知返回 `null`。
      */
     public function getSize()
     {
@@ -146,7 +150,9 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 返回文件读/写指针的当前位置
+     * 返回当前读/写的指针位置。
+     *
+     * @throws \RuntimeException 产生错误时抛出。
      */
     public function tell(): int
     {
@@ -161,7 +167,7 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 如果指针位于 stream 末尾，返回 true
+     * 返回是否位于流的末尾。
      */
     public function eof(): bool
     {
@@ -173,7 +179,7 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 返回流是否 seekable
+     * 返回流是否可随机读取。
      */
     public function isSeekable(): bool
     {
@@ -181,10 +187,13 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 重置 steam 指针至起始处
+     * 定位流的起始位置。
      *
-     * 如果 stream 指针不可偏移，此方法将抛出异常；
-     * 否则，文件指针将会偏移至起始处
+     * 如果流不可以随机访问，此方法将引发异常；否则将执行 seek(0)。
+     *
+     * @see seek()
+     * @see http://www.php.net/manual/en/function.fseek.php
+     * @throws \RuntimeException 失败时抛出。
      */
     public function rewind(): void
     {
@@ -192,7 +201,15 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 将 handle 指针偏移至特定位置
+     * 定位流中的指定位置。
+     *
+     * @see http://www.php.net/manual/en/function.fseek.php
+     * @param int $offset 要定位的流的偏移量。
+     * @param int $whence 指定如何根据偏移量计算光标位置。有效值与 PHP 内置函数 `fseek()` 相同。
+     *     SEEK_SET：设定位置等于 $offset 字节。默认。
+     *     SEEK_CUR：设定位置为当前位置加上 $offset。
+     *     SEEK_END：设定位置为文件末尾加上 $offset （要移动到文件尾之前的位置，offset 必须是一个负值）。
+     * @throws \RuntimeException 失败时抛出。
      */
     public function seek($offset, $whence = SEEK_SET): void
     {
@@ -207,7 +224,7 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 返回流是否可写
+     * 返回流是否可写。
      */
     public function isWritable(): bool
     {
@@ -216,7 +233,11 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 写入数据至 stream
+     * 向流中写数据。
+     * 返回写入流的字节数。
+     *
+     * @param string $string 要写入流的数据。
+     * @throws \RuntimeException 失败时抛出。
      */
     public function write($string): int
     {
@@ -242,7 +263,12 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 从 stream 读取指定长度数据
+     * 从流中读取数据。
+     * 返回从流中读取的数据，如果没有可用的数据则返回空字符串。
+     *
+     * @param int $length 从流中读取最多 $length 字节的数据并返回。如果数据不足，则可能返回少于
+     *     $length 字节的数据。
+     * @throws \RuntimeException 失败时抛出。
      */
     public function read($length): string
     {
@@ -259,7 +285,10 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 以字符串形式返回 strean 内容
+     * 返回字符串中的剩余内容。
+     *
+     * @throws \RuntimeException 如果无法读取则抛出异常。
+     * @throws \RuntimeException 如果在读取时发生错误则抛出异常。
      */
     public function getContents(): string
     {
@@ -276,10 +305,14 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 获取 stream 元数据数组或获取指定 key 对应数据
+     * 获取流中的元数据作为关联数组，或者检索指定的键。
      *
-     * @param string|null $key
-     * @return array|mixed|null
+     * 返回的键与从 PHP 的 stream_get_meta_data() 函数返回的键相同。
+     *
+     * @see http://php.net/manual/en/function.stream-get-meta-data.php
+     * @param string $key 要检索的特定元数据。
+     * @return array|mixed|null 如果没有键，则返回关联数组。如果提供了键并且找到值，
+     *     则返回特定键值；如果未找到键，则返回 null。
      */
     public function getMetadata($key = null)
     {

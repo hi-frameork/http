@@ -5,6 +5,7 @@ namespace Hi\Http\Message;
 use Hi\Helpers\Arr;
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
+
 use function is_string;
 use function parse_url;
 use function strtolower;
