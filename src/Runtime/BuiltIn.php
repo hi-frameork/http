@@ -15,38 +15,39 @@ use Hi\Server\AbstructBuiltInServer;
 class BuiltIn extends AbstructBuiltInServer
 {
     /**
+     * @var callable
+     */
+    protected $requestHanle;
+
+    /**
      * {@inheritDoc}
      */
-    public function start(callable $requestHanle, callable $taskHandle)
+    public function start(): void
     {
         if ('cli' === php_sapi_name()) {
             $this->runServer();
         } else {
-            $serverRequest = new ServerRequest(
-                $_SERVER['REQUEST_METHOD'],
-                $_SERVER['SERVER_PORT'],
-                $_SERVER
-            );
-            $request = new Request;
-            $request->withServerRequest($serverRequest);
-            $response = new Response;
-            call_user_func($requestHanle, $request, $response);
-
-            echo $response->getContent();
+            $this->handle();
         }
+    }
+
+    public function withRequestHandle(callable $callback)
+    {
+        $this->requestHanle = $callback;
+        return $this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function restart()
+    public function restart(): void
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function stop(bool $force = false)
+    public function stop(bool $force = false): void
     {
     }
 
@@ -66,5 +67,20 @@ class BuiltIn extends AbstructBuiltInServer
         );
 
         passthru($command, $status);
+    }
+
+    protected function handle()
+    {
+        $serverRequest = new ServerRequest(
+            $_SERVER['REQUEST_METHOD'],
+            $_SERVER['SERVER_PORT'],
+            $_SERVER
+        );
+        $request = new Request;
+        $request->withServerRequest($serverRequest);
+        $response = new Response;
+        call_user_func($this->requestHanle, $request, $response);
+
+        echo $response->getContent();
     }
 }

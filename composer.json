@@ -31,6 +31,7 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "phpstan/phpstan": "^0.12",
-        "swoole/ide-helper": "^4.6"
+        "swoole/ide-helper": "^4.6",
+        "workerman/workerman": "^4.0"
     }
 }
