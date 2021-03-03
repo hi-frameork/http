@@ -35,9 +35,13 @@ class Application
 
     private function createRequestHandle()
     {
-        return function (RequestInterface $request, ResponseInterface $response) {
+        return function ($request, $response) {
             $response->setContent('hi');
         };
+    }
+
+    public function exceptionHandle()
+    {
     }
 }
 

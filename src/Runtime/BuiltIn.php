@@ -76,8 +76,10 @@ class BuiltIn extends AbstructBuiltInServer
             $_SERVER['SERVER_PORT'],
             $_SERVER
         );
+
         $request = new Request;
         $request->withServerRequest($serverRequest);
+
         $response = new Response;
         call_user_func($this->requestHanle, $request, $response);
 
