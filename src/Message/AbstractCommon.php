@@ -2,15 +2,18 @@
 
 namespace Hi\Http\Message;
 
-use Hi\Http\Exceptions\InvalidArgumentException;
+use InvalidArgumentException;
 
+/**
+ * 消息基类
+ */
 abstract class AbstractCommon
 {
     /**
      * 返回已设置参数的新实例
      *
      * @param mixed $element
-     * @return self
+     * @return static
      */
     final protected function cloneInstance($element, string $property)
     {
@@ -21,6 +24,8 @@ abstract class AbstractCommon
 
     /**
      * 检查元素是否为 string
+     *
+     * @param string $element
      */
     final protected function checkStringParameter($element): void
     {
@@ -32,6 +37,7 @@ abstract class AbstractCommon
     /**
      * 检查传入元素类型，并返回克隆对象
      *
+     * @param string $element
      * @return self
      */
     final protected function processWith($element, string $property)

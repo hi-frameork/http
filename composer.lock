@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49efd830718a7bdc2ce5be77f2345291",
+    "content-hash": "ac13c759779d8a9259f21ef7d17d99ae",
     "packages": [
         {
             "name": "hi/helpers",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/helpers.git",
-                "reference": "1fa92e826ee2c5388a01e2db18881ba733f7a8fc"
+                "reference": "d242880aaaffeb2f4c3740d0efa11462e8196566"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/helpers/zipball/1fa92e826ee2c5388a01e2db18881ba733f7a8fc",
-                "reference": "1fa92e826ee2c5388a01e2db18881ba733f7a8fc",
+                "url": "https://api.github.com/repos/hi-frameork/helpers/zipball/d242880aaaffeb2f4c3740d0efa11462e8196566",
+                "reference": "d242880aaaffeb2f4c3740d0efa11462e8196566",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -60,9 +60,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hi-frameork/helpers/issues",
-                "source": "https://github.com/hi-frameork/helpers/tree/v0.0.1"
+                "source": "https://github.com/hi-frameork/helpers/tree/main"
             },
-            "time": "2021-02-26T10:06:16+00:00"
+            "time": "2021-03-01T17:58:38+00:00"
         },
         {
             "name": "hi/server",
@@ -753,16 +753,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.79",
+            "version": "0.12.80",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "dd7769915648b704b9bd12925994457f1c2c8442"
+                "reference": "c6a1b17f22ecf708d434d6bee05092647ec7e686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dd7769915648b704b9bd12925994457f1c2c8442",
-                "reference": "dd7769915648b704b9bd12925994457f1c2c8442",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c6a1b17f22ecf708d434d6bee05092647ec7e686",
+                "reference": "c6a1b17f22ecf708d434d6bee05092647ec7e686",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -799,7 +799,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.79"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.80"
             },
             "funding": [
                 {
@@ -815,7 +815,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-25T16:44:57+00:00"
+            "time": "2021-02-28T20:22:43+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2588,7 +2588,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4"
+        "php": ">=7.2"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
