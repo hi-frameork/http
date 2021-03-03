@@ -6,6 +6,6 @@ namespace Hi\Http\Runtime;
 
 use Hi\Server\AbstructWorkermanServer;
 
-class Workerman extends AbstructWorkermanServer
-{
-}
+// class Workerman extends AbstructWorkermanServer
+// {
+// }

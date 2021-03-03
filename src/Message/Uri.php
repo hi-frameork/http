@@ -68,7 +68,7 @@ final class Uri extends AbstractCommon implements UriInterface
     /**
      * URL 携带认证信息：密码
      *
-     * @var string
+     * @var string|null
      */
     protected $pass = '';
 
@@ -609,6 +609,8 @@ final class Uri extends AbstractCommon implements UriInterface
 
     /**
      * query 字符串分割为数组
+     *
+     * @return array<string|mixed>
      */
     private function splitQueryValue(string $elemen): array
     {

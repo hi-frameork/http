@@ -31,8 +31,6 @@ class BuiltIn extends AbstructBuiltInServer
             $request->withServerRequest($serverRequest);
             $response = new Response;
             call_user_func($requestHanle, $request, $response);
-
-            echo $response->getContent();
         }
     }
 

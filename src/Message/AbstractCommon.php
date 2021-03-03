@@ -38,7 +38,7 @@ abstract class AbstractCommon
      * 检查传入元素类型，并返回克隆对象
      *
      * @param string $element
-     * @return self
+     * @return static
      */
     final protected function processWith($element, string $property)
     {

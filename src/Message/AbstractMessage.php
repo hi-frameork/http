@@ -2,6 +2,7 @@
 
 namespace Hi\Http\Message;
 
+use Hi\Helpers\Collection;
 use Hi\Helpers\Collection\CollectionInterface;
 use InvalidArgumentException;
 use Psr\Http\Message\MessageInterface;
@@ -41,6 +42,7 @@ class AbstractMessage extends AbstractCommon implements MessageInterface
 
     /**
      * @see http://tools.ietf.org/html/rfc3986#section-4.3
+     *
      * @var UriInterface
      */
     protected $uri;
@@ -289,7 +291,7 @@ class AbstractMessage extends AbstractCommon implements MessageInterface
         }
 
         if (empty($valueArray)) {
-            throw new InvalidArgumentException('Heaer 值无效：必须为 string 或 string 数组');
+            throw new InvalidArgumentException('Heaer 值无效：必须为 string 或 array<string>');
         }
 
         $valueData = [];
@@ -342,5 +344,92 @@ class AbstractMessage extends AbstractCommon implements MessageInterface
         }
 
         return $protocol;
+    }
+
+    /**
+     * 返回主机和端口（如果适用）
+     */
+    final protected function getUriHost(UriInterface $uri): string
+    {
+        $host = $uri->getHost();
+
+        if (null != $uri->getPort()) {
+            $host .= ':' . $uri->getPort();
+        }
+
+        return $host;
+    }
+
+    /**
+     * Ensure Host is the first header.
+     *
+     * @see: http://tools.ietf.org/html/rfc7230#section-5.4
+     */
+    final protected function checkHeaderHost(CollectionInterface $collection): CollectionInterface
+    {
+        if ($collection->has('host') && ! empty($this->uri) && '' !== $this->uri->getHost()) {
+
+            $host      = $this->getUriHost($this->uri);
+            $hostArray = $host;
+
+            if (! is_array($hostArray)) {
+                $hostArray = [$host];
+            }
+
+            $collection->remove('host');
+
+            $data           = $collection->toArray();
+            $header         = [];
+            $header["Host"] = $hostArray;
+            $header         = $header + (array) $data;
+
+            $collection->clear();
+            $collection->init($header);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * 处理 HTTP header 信息
+     */
+    final protected function processHeaders($headers): CollectionInterface
+    {
+        if (is_array($headers)) {
+            $collection = $this->populateHeaderCollection($headers);
+            $collection = $this->checkHeaderHost($collection);
+        } else {
+            if (! (is_object($headers) && $headers instanceof CollectionInterface)) {
+                throw new InvalidArgumentException(
+                    'Headers 值类型必须为 array 或者 Hi\Helpers\Collection 类实例'
+                );
+            }
+
+            $collection = $headers;
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Populates the header collection
+     *
+     * @param array $headers
+     *
+     * @return CollectionInterface
+     */
+    final protected function populateHeaderCollection(array $headers): CollectionInterface
+    {
+        $collection = new Collection();
+        foreach ($headers as $name => $value) {
+            $this->checkHeaderName($name);
+
+            $name  = (string) $name;
+            $value = $this->getHeaderValue($value);
+
+            $collection->set($name, $value);
+        }
+
+        return $collection;
     }
 }

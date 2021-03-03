@@ -8,13 +8,13 @@ use Hi\Server\AbstructSwooleServer;
 
 class Swoole extends AbstructSwooleServer
 {
-    protected function createServer()
+    protected function runServer()
     {
     }
 
     public function start(callable $handle, callable $taskHandle)
     {
-        $server->on('request', function())
+        // $server->on('request', function() {});
     }
 
     public function restart()

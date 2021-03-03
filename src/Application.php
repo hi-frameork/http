@@ -2,9 +2,9 @@
 
 namespace Hi\Http;
 
+use Hi\Helpers\Json;
 use Hi\Http\Runtime\BuiltIn;
 use Hi\Server\ServerInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 class Application
 {
@@ -19,24 +19,26 @@ class Application
 
     public function listen(int $port = 8000, string $host = '0.0.0.0')
     {
-        $this
-            ->getServer($port, $host)
-            ->start(
-                $this->createRequestHandle(),
-                $this->createTaskHandle()
-            )
-        ;
+        $type = '';
+
+        $runtime = $this->withRuntime($type, $port, $host);
+        $runtime->start(
+            $this->createRequestHandle(),
+            $this->createTaskHandle()
+        );
     }
 
-    protected function getServer(): ServerInterface
+    protected function withRuntime(): ServerInterface
     {
         return new BuiltIn;
     }
 
     private function createRequestHandle()
     {
-        return function (ServerRequestInterface $request) {
-            return time();
+        return function (RequestInterface $request, ResponseInterface $response) {
+            $response
+                ->setContent(Json::encode($request->getServerRequest()->getServerParams()))
+            ;
         };
     }
 
