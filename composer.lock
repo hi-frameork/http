@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "13fc23eea94131b3c226104c65472a9d",
+    "content-hash": "1d450474c9f43967bbbad6a4649866fb",
     "packages": [
         {
             "name": "hi/helpers",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/helpers.git",
-                "reference": "d242880aaaffeb2f4c3740d0efa11462e8196566"
+                "reference": "61efe4dd914e346d8e05630c505248c617ec7519"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/helpers/zipball/d242880aaaffeb2f4c3740d0efa11462e8196566",
-                "reference": "d242880aaaffeb2f4c3740d0efa11462e8196566",
+                "url": "https://api.github.com/repos/hi-frameork/helpers/zipball/61efe4dd914e346d8e05630c505248c617ec7519",
+                "reference": "61efe4dd914e346d8e05630c505248c617ec7519",
                 "shasum": ""
             },
             "require": {
@@ -56,7 +56,45 @@
                 "issues": "https://github.com/hi-frameork/helpers/issues",
                 "source": "https://github.com/hi-frameork/helpers/tree/main"
             },
-            "time": "2021-03-01T17:58:38+00:00"
+            "time": "2021-03-04T04:53:49+00:00"
+        },
+        {
+            "name": "hi/pipeline",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hi-frameork/pipeline.git",
+                "reference": "766011bb1ac05d4d50febe4a26889f75fd11c604"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hi-frameork/pipeline/zipball/766011bb1ac05d4d50febe4a26889f75fd11c604",
+                "reference": "766011bb1ac05d4d50febe4a26889f75fd11c604",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hi\\Pipeline\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "热心网友",
+                    "email": "anoxia@engineer.com"
+                }
+            ],
+            "description": "Hi 框架管道组件",
+            "support": {
+                "issues": "https://github.com/hi-frameork/pipeline/issues",
+                "source": "https://github.com/hi-frameork/pipeline/tree/main"
+            },
+            "time": "2021-03-04T14:37:51+00:00"
         },
         {
             "name": "hi/server",
@@ -64,12 +102,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/server.git",
-                "reference": "785f1e37299145efa5fe5334c9f99150dafcc47d"
+                "reference": "51508c947a91ac06c0254b2288298a06865dc878"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/server/zipball/785f1e37299145efa5fe5334c9f99150dafcc47d",
-                "reference": "785f1e37299145efa5fe5334c9f99150dafcc47d",
+                "url": "https://api.github.com/repos/hi-frameork/server/zipball/51508c947a91ac06c0254b2288298a06865dc878",
+                "reference": "51508c947a91ac06c0254b2288298a06865dc878",
                 "shasum": ""
             },
             "require": {
@@ -77,7 +115,8 @@
             },
             "require-dev": {
                 "phpstan/phpstan": "^0.12",
-                "swoole/ide-helper": "^4.6"
+                "swoole/ide-helper": "^4.6",
+                "workerman/workerman": "^4.0"
             },
             "suggest": {
                 "ext-swoole": "使用 Swoole 获取更高地服务性能"
@@ -103,7 +142,7 @@
                 "issues": "https://github.com/hi-frameork/server/issues",
                 "source": "https://github.com/hi-frameork/server/tree/develop"
             },
-            "time": "2021-03-03T15:49:39+00:00"
+            "time": "2021-03-04T14:31:24+00:00"
         },
         {
             "name": "psr/http-message",
@@ -2402,7 +2441,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "hi/helpers": 20,
-        "hi/server": 20
+        "hi/server": 20,
+        "hi/pipeline": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

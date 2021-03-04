@@ -13,6 +13,14 @@ use Swoole\Http\Server;
 class Swoole extends AbstructSwooleServer
 {
     /**
+     * {@inheritdoc}
+     */
+    protected function createServer()
+    {
+        return new Server($this->host, $this->port);
+    }
+
+    /**
      * @var callable
      */
     protected $requestHanle;
@@ -21,11 +29,6 @@ class Swoole extends AbstructSwooleServer
     {
         $this->requestHanle = $callback;
         return $this;
-    }
-
-    protected function createServer()
-    {
-        return new Server($this->host, $this->port);
     }
 
 

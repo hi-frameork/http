@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Hi\Http\Runtime;
 
+use Hi\Http\Context;
 use Hi\Http\Message\ServerRequest;
-use Hi\Http\Request;
-use Hi\Http\Response;
 use Hi\Server\AbstructFpmServer;
 
 class Fpm extends AbstructFpmServer
@@ -24,17 +23,16 @@ class Fpm extends AbstructFpmServer
 
     public function start(): void
     {
-        $serverRequest = new ServerRequest(
+        $request = new ServerRequest(
             $_SERVER['REQUEST_METHOD'],
             $_SERVER['SERVER_PORT'],
             $_SERVER
         );
-        $request = new Request;
-        $request->withServerRequest($serverRequest);
-        $response = new Response;
-        call_user_func($this->requestHanle, $request, $response);
 
-        echo $response->getContent();
+        $context = new Context($request);
+        call_user_func($this->handleRequest, $context);
+
+        echo (string) $context->response->getBody();
     }
 
     public function restart(): void
