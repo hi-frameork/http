@@ -40,7 +40,7 @@ use Hi\Http\Application;
 use Hi\Http\Context;
 use Hi\Http\Runtime\RuntimeFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 $app = new Application(['runtime' => RuntimeFactory::SWOOLE]);
 
