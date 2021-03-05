@@ -1,5 +1,4 @@
-# http
-Hi 框架 http 组件
+# Hi 框架 http 组件
 
 超轻量 http 组建，统一 server 接口，支持在 `swoole`, `workerman`, `php-fpm`, `php-builtin` 等容器中运行。
 
@@ -32,7 +31,7 @@ $app->listen(9000);
 
 执行 `php test.php`，访问浏览器即可看到内容。
 
-默认使用 `php-builtin` 容器运行（即PHP内置webserver），更改使用容器，在 `Application` 实例化时传入 runtime type 即可：
+默认使用 `php-builtin` 容器运行（即PHP内建webserver），更改运行容器，在 `Application` 实例化时传入 runtime 配置即可：
 
 ```php
 <?php
@@ -43,7 +42,7 @@ use Hi\Http\Runtime\RuntimeFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$app = new Application(['type' => RuntimeFactory::WORKERMAN]);
+$app = new Application(['runtime' => RuntimeFactory::WORKERMAN]);
 
 $app->get('/hi', function () {
     return 'Hi-framework';
