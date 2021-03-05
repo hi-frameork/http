@@ -14,8 +14,10 @@ class RuntimeFactory
 
     const WORKERMAN = 4;
 
-    public static function createInstance(array $config = [], $runtimeType = static::BUILT_IN)
+    public static function createInstance(array $config = [])
     {
+        $runtimeType = $config['runtime'] ?? static::BUILT_IN;
+
         switch ($runtimeType) {
             case static::BUILT_IN:
                 return new BuiltIn($config);

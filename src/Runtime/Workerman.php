@@ -7,7 +7,6 @@ namespace Hi\Http\Runtime;
 use Hi\Http\Context;
 use Hi\Http\Message\ServerRequest;
 use Hi\Server\AbstructWorkermanServer;
-use Workerman\Worker;
 
 class Workerman extends AbstructWorkermanServer
 {
@@ -20,7 +19,7 @@ class Workerman extends AbstructWorkermanServer
 
         $context = new Context($request);
 
-        call_user_func($this->requestHanle, $context);
+        call_user_func($this->handleRequest, $context);
 
         $connection->send((string) $context->response->getBody());
     }

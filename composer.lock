@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d450474c9f43967bbbad6a4649866fb",
+    "content-hash": "252d95e96cd17f7489726f9ec77633a0",
     "packages": [
         {
             "name": "hi/helpers",
@@ -59,55 +59,17 @@
             "time": "2021-03-04T04:53:49+00:00"
         },
         {
-            "name": "hi/pipeline",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hi-frameork/pipeline.git",
-                "reference": "766011bb1ac05d4d50febe4a26889f75fd11c604"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/pipeline/zipball/766011bb1ac05d4d50febe4a26889f75fd11c604",
-                "reference": "766011bb1ac05d4d50febe4a26889f75fd11c604",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Hi\\Pipeline\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "热心网友",
-                    "email": "anoxia@engineer.com"
-                }
-            ],
-            "description": "Hi 框架管道组件",
-            "support": {
-                "issues": "https://github.com/hi-frameork/pipeline/issues",
-                "source": "https://github.com/hi-frameork/pipeline/tree/main"
-            },
-            "time": "2021-03-04T14:37:51+00:00"
-        },
-        {
             "name": "hi/server",
             "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/server.git",
-                "reference": "51508c947a91ac06c0254b2288298a06865dc878"
+                "reference": "8954bd3ea4734dfc0b3b9bcd1633699969787555"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/server/zipball/51508c947a91ac06c0254b2288298a06865dc878",
-                "reference": "51508c947a91ac06c0254b2288298a06865dc878",
+                "url": "https://api.github.com/repos/hi-frameork/server/zipball/8954bd3ea4734dfc0b3b9bcd1633699969787555",
+                "reference": "8954bd3ea4734dfc0b3b9bcd1633699969787555",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +104,7 @@
                 "issues": "https://github.com/hi-frameork/server/issues",
                 "source": "https://github.com/hi-frameork/server/tree/develop"
             },
-            "time": "2021-03-04T14:31:24+00:00"
+            "time": "2021-03-05T09:29:28+00:00"
         },
         {
             "name": "psr/http-message",
@@ -2385,16 +2347,16 @@
         },
         {
             "name": "workerman/workerman",
-            "version": "v4.0.18",
+            "version": "v4.0.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/walkor/Workerman.git",
-                "reference": "02930876526479c7e4123ef1dc8d23d509d40e72"
+                "reference": "af6025976fba817eeb4d5fbf8d0c1059a5819da3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/walkor/Workerman/zipball/02930876526479c7e4123ef1dc8d23d509d40e72",
-                "reference": "02930876526479c7e4123ef1dc8d23d509d40e72",
+                "url": "https://api.github.com/repos/walkor/Workerman/zipball/af6025976fba817eeb4d5fbf8d0c1059a5819da3",
+                "reference": "af6025976fba817eeb4d5fbf8d0c1059a5819da3",
                 "shasum": ""
             },
             "require": {
@@ -2434,15 +2396,14 @@
                 "source": "https://github.com/walkor/workerman",
                 "wiki": "http://doc.workerman.net/"
             },
-            "time": "2021-01-02T06:14:59+00:00"
+            "time": "2021-03-05T06:44:28+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "hi/helpers": 20,
-        "hi/server": 20,
-        "hi/pipeline": 20
+        "hi/server": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

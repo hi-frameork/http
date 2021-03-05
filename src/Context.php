@@ -5,10 +5,12 @@ namespace Hi\Http;
 use Hi\Helpers\Input;
 use Hi\Http\Message\ServerRequest;
 use Hi\Http\Message\Response;
+use Hi\Http\Router\Route;
 
 class Context
 {
     /**
+     * @var Route
      */
     public $route;
 
@@ -53,16 +55,15 @@ class Context
      * 断言并抛出异常（如果条件为 false）
      * 此方法用于在条件不满足时快速抛出异常，有助于简化代码
      *
-     * @param mixed                 $condition
-     * @param int                   $status
-     * @param string                $message
-     * @param int|string|array|null $addition
+     * @param mixed                 $condition  条件
+     * @param int                   $status     HTTP statusCode
+     * @param string                $message    错误信息
+     * @param int|string|array|null $addition   附件信息（通常用来给客户端展示更多错误信息）
      */
     public function assert($condition, $status, $message = '', $addition = null): void
     {
         if (! $condition) {
-            $this->response->withStatus($status);
-            throw new Exception($message, -1, $addition);
+            throw new Exception($message, $status, $addition);
         }
     }
 
@@ -71,8 +72,8 @@ class Context
      * 直接使用 $ctx->input 属性即可获取 queryString 参数与 form data 等参数
      *
      * 注：如果 query 参数与 form data 参数存在同名参数时
-     * form data 参数将会覆盖 query 参数，若想获取正确 query 参数
-     * 请使用 $ctx->request->queryParams() 方法手动提取
+     *     form data 参数将会覆盖 query 参数，若想获取正确 query 参数
+     *     请使用 $ctx->request->queryParams() 方法手动提取
      */
     private function processInput(): Input
     {

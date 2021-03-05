@@ -2,9 +2,11 @@
 
 namespace Hi\Http;
 
+use Hi\Helpers\Json;
+use Hi\Http\Middleware\MiddlewareInterface;
 use Hi\Http\Runtime\RuntimeFactory;
-use Hi\Pipeline\PipelineFactory;
-use Hi\Pipeline\PipelineInterface;
+use InvalidArgumentException;
+use Throwable;
 
 /**
  * @method get(string $pattern, callable $handle)
@@ -14,7 +16,6 @@ use Hi\Pipeline\PipelineInterface;
  * @method head(string $pattern, callable $handle)
  * @method options(string $pattern, callable $handle)
  * @method patch(string $pattern, callable $handle)
- * @method notFound(callable $handle)
  */
 class Application
 {
@@ -24,27 +25,43 @@ class Application
     protected $runtime;
 
     /**
-     * @var PipelineInterface
+     * @var Router
      */
-    protected $pipeline;
-
     protected $router;
+
+    /**
+     * @var array
+     */
+    protected $middlewares = [];
 
     /**
      * @var callable
      */
-    protected $errorHandler;
+    protected $handleRequest;
+
+    /**
+     * @var callable
+     */
+    protected $handleException;
 
     /**
      * Application Construct.
      */
     public function __construct(array $config = [])
     {
-        $this->runtime  = RuntimeFactory::createInstance($config);
-        $this->pipeline = PipelineFactory::createReducePipeline();
+        $this->runtime = RuntimeFactory::createInstance($config);
+        $this->router  = new Router;
+
+        // 注册请求处理回调 handle
+        $this->handleRequest = $this->defaultRequestHandle();
+        // 注册应用抛出异常时处理 handle
+        $this->handleException = $this->defaultExceptionHandle();
     }
 
-    public function __call($name, $arguments)
+    /**
+     * 动态代理 router，路由规则注册
+     */
+    public function __call(string $name, $arguments)
     {
         $this->router->{$name}($arguments[0], $arguments[1]);
     }
@@ -57,7 +74,13 @@ class Application
      */
     public function use($middleware)
     {
-        $this->pipeline->appendStage($middleware);
+        if (! $middleware instanceof MiddlewareInterface && ! is_callable($middleware)) {
+            throw new InvalidArgumentException(
+                '中间件必须为闭包或者 MiddlewareInterface 子类'
+            );
+        }
+
+        $this->middlewares[] = $middleware;
     }
 
     /**
@@ -68,28 +91,65 @@ class Application
         // 注册并启动服务
         $this
             ->runtime
-            ->withRequestHanle($this->callback())
+            ->withRequestHanle($this->handleRequest)
             ->start($port, $host)
         ;
     }
 
-    /**
-     * 返回请求处理回调
-     */
-    public function callback(): callable
+    public function set(string $event, $handle)
+    {
+        switch ($event) {
+            case 'handleRequest':
+                $this->handleRequest = $handle;
+                break;
+
+            case 'handleError':
+            case 'handleException':
+                $this->handleException = $handle;
+                break;
+
+            case 'handleNotFound':
+                $this->router->notFound($handle);
+                break;
+
+        }
+    }
+
+    protected function defaultRequestHandle(): callable
     {
         return function (Context $ctx) {
-            $this->pipeline->process($ctx, function ($ctx) {
-            });
+            return (new Pipeline)
+                ->send($ctx)
+                ->throgh($this->middlewares)
+                ->thenReturn()
+            ;
         };
     }
 
     /**
-     * 注册异常发生时异常处理回调方法
+     * @param Throwable $e
      */
-    public function error(callable $errorHandler): void
+    protected function defaultExceptionHandle()
     {
-        $this->errorHandler = $errorHandler;
+        return function (Context $ctx, $e) {
+            // 除非由业务指定 http statusCode
+            // 否则抛出异常时一律使用 500 作为 statusCode
+            $status = 500;
+
+            $data = [
+                'message' => $e->getMessage(),
+                'code'    => $e->getCode(),
+            ];
+
+            // 获取异常所携带的额外信息
+            if ($e instanceof Exception) {
+                $status           = $e->getStatusCode();
+                $data['addition'] = $e->getAddition();
+            }
+
+            $ctx->response->withStatus($status);
+            $ctx->response->getBody()->write(Json::encode($data));
+        };
     }
 }
 

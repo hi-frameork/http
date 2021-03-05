@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hi\Http\Runtime;
 
+use Hi\Http\Context;
 use Hi\Http\Message\ServerRequest;
 use Hi\Http\Request;
 use Hi\Http\Response;
@@ -13,7 +14,7 @@ use Swoole\Http\Server;
 class Swoole extends AbstructSwooleServer
 {
     /**
-     * {@inheritdoc}
+     * 返回 swoole http server 实例
      */
     protected function createServer()
     {
@@ -39,20 +40,17 @@ class Swoole extends AbstructSwooleServer
 
     public function onRequest($swooleRequest, $swooleResponse)
     {
-        $serverRequest = new ServerRequest(
+        $request = new ServerRequest(
             $swooleRequest->server['request_method'],
             $swooleRequest->server['request_uri'],
             $swooleRequest->server
         );
 
-        $reqeust = new Request;
-        $reqeust->withServerRequest($serverRequest);
+        $context = new Context($request);
 
-        $response = new Response;
+        call_user_func($this->handleRequest, $context);
 
-        call_user_func($this->requestHanle, $reqeust, $response);
-
-        $swooleResponse->end($response->getContent());
+        $swooleResponse->end((string) $context->response->getBody());
     }
 
     public function restart(): void

@@ -21,10 +21,9 @@
     },
     "require": {
         "php": ">=7.2",
-        "hi/helpers": "dev-main",
-        "hi/server": "dev-develop",
         "psr/http-message": "^1.0",
-        "hi/pipeline": "dev-main"
+        "hi/helpers": "dev-main",
+        "hi/server": "dev-develop"
     },
     "scripts": {
         "test": "php ./vendor/bin/phpunit"
