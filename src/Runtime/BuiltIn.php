@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Hi\Http\Runtime;
 
-use Hi\Http\Message\Request;
-use Hi\Http\Message\Stream\Input;
+use Hi\Http\Context;
+use Hi\Http\Message\ServerRequest;
 use Hi\Server\AbstructBuiltInServer;
 
 /**
@@ -16,46 +16,26 @@ class BuiltIn extends AbstructBuiltInServer
     /**
      * {@inheritDoc}
      */
-    public function start(callable $handle, callable $taskHandle)
+    public function start(): void
     {
         if ('cli' === php_sapi_name()) {
-            $this->runServer();
+            $this->runHttpServer();
         } else {
-            $request = new Request;
-            $request->withBody(new Input);
-            $response = call_user_func($handle, $request);
+            $this->handle();
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function restart()
+    protected function handle()
     {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function stop(bool $force = false)
-    {
-    }
-
-    public function runServer()
-    {
-        // 生成入口文件完整路径
-        $separator     = DIRECTORY_SEPARATOR;
-        $entryFilePath = rtrim($_SERVER['PWD'], $separator) . $separator . ltrim($_SERVER['SCRIPT_FILENAME'], $separator);
-
-        // 拼接 PHP 内建 server 启动完整指令
-        $command = sprintf(
-            '%s -S %s:%s %s',
-            $this->findPhpExecutable(),
-            $this->host,
-            $this->port,
-            $entryFilePath
+        $request = new ServerRequest(
+            $_SERVER['REQUEST_METHOD'],
+            $_SERVER['SERVER_PORT'],
+            $_SERVER
         );
 
-        passthru($command, $status);
+        $context = new Context($request);
+        call_user_func($this->handleRequest, $context);
+
+        echo (string) $context->response->getBody();
     }
 }
