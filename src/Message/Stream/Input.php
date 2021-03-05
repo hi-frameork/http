@@ -13,6 +13,11 @@ use Hi\Http\Message\Stream;
 class Input extends Stream
 {
     /**
+     * @var resource
+     */
+    protected $handle;
+
+    /**
      * @var string
      */
     private $data = '';
@@ -53,12 +58,13 @@ class Input extends Stream
     /**
      * 获取 stream 内容
      */
-    public function getContents($length = -1): string
+    public function getContents(int $length = -1): string
     {
         if ($this->eof) {
             return $this->data;
         }
 
+        /** @var string $data */
         $data       = stream_get_contents($this->handle, $length);
         $this->data = $data;
 
