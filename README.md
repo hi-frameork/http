@@ -31,7 +31,7 @@ $app->listen(9000);
 
 执行 `php test.php`，访问浏览器即可看到内容。
 
-默认使用 `php-builtin` 容器运行（即PHP内建webserver），更改运行容器，在 `Application` 实例化时传入 runtime 配置即可：
+默认使用 `php-builtin` 容器运行（即PHP内建webserver），更改运行容器，在 `Application` 实例化时传入 runtime 配置即可（使用 swoole 作为运行容器）：
 
 ```php
 <?php
@@ -42,7 +42,7 @@ use Hi\Http\Runtime\RuntimeFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$app = new Application(['runtime' => RuntimeFactory::WORKERMAN]);
+$app = new Application(['runtime' => RuntimeFactory::SWOOLE]);
 
 $app->get('/hi', function () {
     return 'Hi-framework';
