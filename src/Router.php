@@ -2,10 +2,12 @@
 
 namespace Hi\Http;
 
+use Hi\Http\Router\RouterInterface;
 use Hi\Http\Router\Route;
+use Closure;
 use InvalidArgumentException;
 
-class Router
+class Router implements RouterInterface
 {
     /**
      * @var array
@@ -17,11 +19,21 @@ class Router
      */
     protected $notFoundHandle;
 
+    /**
+     * Router Construct
+     */
     public function __construct()
     {
         $this->notFoundHandle = $this->defaultNotFoundHandle();
     }
 
+    /**
+     * GET 方法路由注
+     *
+     * @param callable  $handle
+     * @param mixed     $extend
+     * @return $this
+     */
     public function get(string $pattern, $handle, $extend = null)
     {
         $this->mount('GET', $pattern, $handle, $extend);
@@ -57,16 +69,18 @@ class Router
         $this->mount('GET', $pattern, $handle, $extend);
     }
 
-    public function group(string $prefix = '', $routeRegisterHandle, $extend = null)
+    public function group(string $prefix = '', Closure $routeRegisterHandle, $extend = null)
     {
+        call_user_func($routeRegisterHandle, $this);
     }
 
     public function mount(string $method, string $pattern, $handle, $extend = null)
     {
+        $pattern = '/' . trim($pattern, '/');
         $this->tree[$method . $pattern] = [$handle, $extend];
     }
 
-    public function method(string $method, string $pattern): Route
+    public function match(string $method, string $pattern): Route
     {
         $key = $method . $pattern;
         return isset($this->tree[$key]) 
