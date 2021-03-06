@@ -3,6 +3,7 @@
 namespace Hi\Http;
 
 use Closure;
+use InvalidArgumentException;
 
 class Pipeline
 {
