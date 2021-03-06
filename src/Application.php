@@ -42,7 +42,7 @@ class Application
     /**
      * @var callable
      */
-    protected $handleException;
+    protected $handleThrow;
 
     /**
      * Application Construct.
@@ -50,12 +50,12 @@ class Application
     public function __construct(array $config = [])
     {
         $this->runtime = RuntimeFactory::createInstance($config);
-        $this->router  = new Router;
+        $this->router = new Router;
 
         // 注册请求处理回调 handle
         $this->handleRequest = $this->defaultRequestHandle();
         // 注册应用抛出异常时处理 handle
-        $this->handleException = $this->defaultExceptionHandle();
+        $this->handleThrow = $this->defaultThrowHandle();
     }
 
     /**
@@ -74,7 +74,7 @@ class Application
      */
     public function use($middleware)
     {
-        if (! $middleware instanceof MiddlewareInterface && ! is_callable($middleware)) {
+        if (! (new $middleware) instanceof MiddlewareInterface && ! is_callable($middleware)) {
             throw new InvalidArgumentException(
                 '中间件必须为闭包或者 MiddlewareInterface 子类'
             );
@@ -86,8 +86,10 @@ class Application
     /**
      * 监听指定端口并启动 HTTP 服务
      */
-    public function listen(int $port = null, string $host = null): void
+    public function listen(int $port = 9527, string $host = '127.0.0.1'): void
     {
+        $this->registerBuiltInMiddleware();
+
         // 注册并启动服务
         $this
             ->runtime
@@ -118,20 +120,31 @@ class Application
     protected function defaultRequestHandle(): callable
     {
         return function (Context $ctx) {
-            return (new Pipeline)
-                ->send($ctx)
-                ->throgh($this->middlewares)
-                ->thenReturn()
-            ;
+            try {
+                $ctx->route = $this->router->match(
+                    $ctx->request->getMethod(),
+                    $ctx->request->getUri()->getPath()
+                );
+
+                (new Pipeline)
+                    ->send($ctx)
+                    ->throgh($this->middlewares)
+                    ->thenReturn()
+                ;
+            } catch (Throwable $e) {
+                call_user_func($this->handleThrow, $ctx, $e);
+            }
+
+            return $ctx->response;
         };
     }
 
     /**
      * @param Throwable $e
      */
-    protected function defaultExceptionHandle()
+    protected function defaultThrowHandle()
     {
-        return function (Context $ctx, $e) {
+        return function (Context $ctx, Throwable $e) {
             // 除非由业务指定 http statusCode
             // 否则抛出异常时一律使用 500 作为 statusCode
             $status = 500;
@@ -148,8 +161,20 @@ class Application
             }
 
             $ctx->response->withStatus($status);
+            $ctx->response->withHeader('Content-Type', 'application/json');
             $ctx->response->getBody()->write(Json::encode($data));
         };
+    }
+
+    /**
+     * 注册内置中间件
+     *
+     * 该方法在所有自定义中间件注册完毕
+     * 服务启动之前进行执行注册
+     */
+    private function registerBuiltInMiddleware(): void
+    {
+        $this->use(\Hi\Http\Middleware\DispatchMiddleware::class);
     }
 }
 
