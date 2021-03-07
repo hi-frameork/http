@@ -5,41 +5,25 @@ declare(strict_types=1);
 namespace Hi\Http\Runtime;
 
 use Hi\Http\Context;
-use Hi\Http\Message\ServerRequest;
-use Hi\Server\AbstructFpmServer;
+use Hi\Http\Message\Response;
+use Throwable;
 
-class Fpm extends AbstructFpmServer
+class Fpm extends BuiltIn
 {
-    /**
-     * @var callable
-     */
-    protected $requestHanle;
-
-    public function withRequestHandle(callable $callback)
+    public function start(int $port = 9527, string $host = '127.0.0.1'): void
     {
-        $this->requestHanle = $callback;
-        return $this;
-    }
+        try {
+            $response = call_user_func(
+                $this->handleRequest,
+                (new Context($this->createServerRequest()))
+            );
+        } catch (Throwable $e) {
+            $response = new Response();
+            $response->getBody()->write($e->getMessage());
+        }
 
-    public function start(): void
-    {
-        $request = new ServerRequest(
-            $_SERVER['REQUEST_METHOD'],
-            $_SERVER['SERVER_PORT'],
-            $_SERVER
-        );
+        setcookie('abs', '1234');
 
-        $context = new Context($request);
-        call_user_func($this->handleRequest, $context);
-
-        echo (string) $context->response->getBody();
-    }
-
-    public function restart(): void
-    {
-    }
-
-    public function stop(bool $force = false): void
-    {
+        echo (string) $response->getBody();
     }
 }

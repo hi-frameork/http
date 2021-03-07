@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/helpers.git",
-                "reference": "284fed65c6e6745513fa9f7f717b40b7f6d846d0"
+                "reference": "394ec77b7079af7f7ee5ed97226efbd2def527ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/helpers/zipball/284fed65c6e6745513fa9f7f717b40b7f6d846d0",
-                "reference": "284fed65c6e6745513fa9f7f717b40b7f6d846d0",
+                "url": "https://api.github.com/repos/hi-frameork/helpers/zipball/394ec77b7079af7f7ee5ed97226efbd2def527ad",
+                "reference": "394ec77b7079af7f7ee5ed97226efbd2def527ad",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 "issues": "https://github.com/hi-frameork/helpers/issues",
                 "source": "https://github.com/hi-frameork/helpers/tree/main"
             },
-            "time": "2021-03-05T19:35:03+00:00"
+            "time": "2021-03-05T20:04:45+00:00"
         },
         {
             "name": "hi/server",

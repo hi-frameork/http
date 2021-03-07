@@ -4,7 +4,6 @@ namespace Hi\Http;
 
 use Hi\Http\Router\RouterInterface;
 use Hi\Http\Router\Route;
-use Closure;
 use InvalidArgumentException;
 
 class Router implements RouterInterface
@@ -18,6 +17,11 @@ class Router implements RouterInterface
      * @var callable
      */
     protected $notFoundHandle;
+
+    /**
+     * @var string
+     */
+    protected $prefix = '';
 
     /**
      * Router Construct
@@ -41,42 +45,50 @@ class Router implements RouterInterface
 
     public function post(string $pattern, $handle, $extend = null)
     {
-        $this->mount('GET', $pattern, $handle, $extend);
+        $this->mount('POST', $pattern, $handle, $extend);
     }
 
     public function put(string $pattern, $handle, $extend = null)
     {
-        $this->mount('GET', $pattern, $handle, $extend);
+        $this->mount('PUT', $pattern, $handle, $extend);
     }
 
     public function delete(string $pattern, $handle, $extend = null)
     {
-        $this->mount('GET', $pattern, $handle, $extend);
+        $this->mount('DELETE', $pattern, $handle, $extend);
     }
 
     public function head(string $pattern, $handle, $extend = null)
     {
-        $this->mount('GET', $pattern, $handle, $extend);
+        $this->mount('HEAD', $pattern, $handle, $extend);
     }
 
     public function options(string $pattern, $handle, $extend = null)
     {
-        $this->mount('GET', $pattern, $handle, $extend);
+        $this->mount('OPTIONS', $pattern, $handle, $extend);
     }
 
     public function patch(string $pattern, $handle, $extend = null)
     {
-        $this->mount('GET', $pattern, $handle, $extend);
+        $this->mount('PATCH', $pattern, $handle, $extend);
     }
 
-    public function group(string $prefix = '', Closure $routeRegisterHandle, $extend = null)
+    public function group(array $configs)
     {
-        call_user_func($routeRegisterHandle, $this);
+        if (empty($configs)) {
+            return;
+        }
+
+        foreach ($configs as $prefix => $item) {
+            $this->prefix = '/' . trim($prefix, '/');
+            $item($this);
+            $this->prefix = '';
+        }
     }
 
     public function mount(string $method, string $pattern, $handle, $extend = null)
     {
-        $pattern = '/' . trim($pattern, '/');
+        $pattern = $this->prefix . '/' . trim($pattern, '/');
         $this->tree[$method . $pattern] = [$handle, $extend];
     }
 

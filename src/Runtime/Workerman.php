@@ -14,14 +14,12 @@ class Workerman extends AbstructWorkermanServer
     {
         $request = new ServerRequest(
             $workerRequest->method(),
-            $workerRequest->path(),
+            $workerRequest->path()
         );
 
-        $context = new Context($request);
+        $response = call_user_func($this->handleRequest, new Context($request));
 
-        call_user_func($this->handleRequest, $context);
-
-        $connection->send((string) $context->response->getBody());
+        $connection->send((string) $response->getBody());
     }
 
     public function restart(): void

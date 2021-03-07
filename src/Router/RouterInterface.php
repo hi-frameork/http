@@ -2,8 +2,6 @@
 
 namespace Hi\Http\Router;
 
-use Closure;
-
 interface RouterInterface
 {
     public function get(string $pattern, $handle, $extend = null);
@@ -20,7 +18,7 @@ interface RouterInterface
 
     public function patch(string $pattern, $handle, $extend = null);
 
-    public function group(string $prefix = '', Closure $routeRegisterHandle, $extend = null);
+    public function group(array $routeConfig);
 
     /**
      * 将 HTTP 方法挂载到路由树
@@ -41,5 +39,5 @@ interface RouterInterface
      *
      * @param callable $handle
      */
-    public function notFound($handle): void;
+    public function notFound($handle);
 }

@@ -38,5 +38,7 @@ class RuntimeFactory
             default:
                 throw new RuntimeException('运行时 ' . $runtimeType . ' 不被支持');
         }
+
+        define('SERVER_RUNTIME', $runtimeType);
     }
 }

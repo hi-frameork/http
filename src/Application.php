@@ -2,11 +2,11 @@
 
 namespace Hi\Http;
 
-use Hi\Helpers\Json;
-use Hi\Http\Middleware\MiddlewareInterface;
 use Hi\Http\Runtime\RuntimeFactory;
+use Hi\Http\Middleware\MiddlewareInterface;
 use InvalidArgumentException;
 use Throwable;
+use Hi\Http\Exceptions\Handler;
 
 /**
  * @method get(string $pattern, callable $handle)
@@ -16,6 +16,7 @@ use Throwable;
  * @method head(string $pattern, callable $handle)
  * @method options(string $pattern, callable $handle)
  * @method patch(string $pattern, callable $handle)
+ * @method group(array $config)
  */
 class Application
 {
@@ -55,7 +56,7 @@ class Application
         // 注册请求处理回调 handle
         $this->handleRequest = $this->defaultRequestHandle();
         // 注册应用抛出异常时处理 handle
-        $this->handleThrow = $this->defaultThrowHandle();
+        $this->handleThrow = [Handler::class, 'reportAndprepareResponse'];
     }
 
     /**
@@ -63,7 +64,7 @@ class Application
      */
     public function __call(string $name, $arguments)
     {
-        $this->router->{$name}($arguments[0], $arguments[1]);
+        call_user_func_array([$this->router, $name], $arguments);
     }
 
     /**
@@ -105,9 +106,8 @@ class Application
                 $this->handleRequest = $handle;
                 break;
 
-            case 'handleError':
-            case 'handleException':
-                $this->handleException = $handle;
+            case 'handleThrow':
+                $this->handleThrow = $handle;
                 break;
 
             case 'handleNotFound':
@@ -126,43 +126,16 @@ class Application
                     $ctx->request->getUri()->getPath()
                 );
 
-                (new Pipeline)
+                return (new Pipeline)
                     ->send($ctx)
                     ->throgh($this->middlewares)
-                    ->thenReturn()
+                    ->then(function ($ctx) {
+                        return $ctx->response;
+                    })
                 ;
             } catch (Throwable $e) {
-                call_user_func($this->handleThrow, $ctx, $e);
+                return call_user_func($this->handleThrow, $e);
             }
-
-            return $ctx->response;
-        };
-    }
-
-    /**
-     * @param Throwable $e
-     */
-    protected function defaultThrowHandle()
-    {
-        return function (Context $ctx, Throwable $e) {
-            // 除非由业务指定 http statusCode
-            // 否则抛出异常时一律使用 500 作为 statusCode
-            $status = 500;
-
-            $data = [
-                'message' => $e->getMessage(),
-                'code'    => $e->getCode(),
-            ];
-
-            // 获取异常所携带的额外信息
-            if ($e instanceof Exception) {
-                $status           = $e->getStatusCode();
-                $data['addition'] = $e->getAddition();
-            }
-
-            $ctx->response->withStatus($status);
-            $ctx->response->withHeader('Content-Type', 'application/json');
-            $ctx->response->getBody()->write(Json::encode($data));
         };
     }
 

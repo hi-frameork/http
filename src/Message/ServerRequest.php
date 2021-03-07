@@ -88,18 +88,18 @@ class ServerRequest extends AbstractRequest implements ServerRequestInterface
      * @param string                   $protocol
      */
     public function __construct(
-        string $method = "GET",
+        string $method = 'GET',
         $uri = null,
         array $serverParams = [],
-        $body = "php://input",
-        $headers = [],
+        $body = 'php://input',
+        array $headers = [],
         array $cookies = [],
         array $queryParams = [],
         array $uploadFiles = [],
         $parsedBody = null,
-        string $protocol = "1.1"
+        string $protocol = '1.1'
     ) {
-        if ("php://input" === $body) {
+        if ('php://input' === $body) {
             $body = new Input;
         }
 
@@ -109,7 +109,7 @@ class ServerRequest extends AbstractRequest implements ServerRequestInterface
         $this->method          = $this->processMethod($method);
         $this->headers         = $this->processHeaders($headers);
         $this->uri             = $this->processUri($uri);
-        $this->body            = $this->processBody($body, "w+b");
+        $this->body            = $this->processBody($body, 'w+b');
         $this->uploadedFiles   = $uploadFiles;
         $this->parsedBody      = $parsedBody;
         $this->serverParams    = $serverParams;
