@@ -66,7 +66,7 @@ class AbstractMessage extends AbstractCommon implements MessageInterface
      * 一个新的带有传参进去的 HTTP 版本的实例
      *
      * @param string $version HTTP 版本信息
-     * @return self
+     * @return static
      */
     public function withProtocolVersion($version)
     {
@@ -159,7 +159,7 @@ class AbstractMessage extends AbstractCommon implements MessageInterface
      *
      * @param string $name 不区分大小写的报头字段名称。
      * @param string|string[] $value 报头信息或报头信息数组。
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException 无效的报头字段或报头信息时抛出
      */
     public function withHeader($name, $value)
@@ -184,7 +184,7 @@ class AbstractMessage extends AbstractCommon implements MessageInterface
      *
      * @param string $name 不区分大小写的报头字段名称。
      * @param string|string[] $value 报头信息或报头信息数组。
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException 报头字段名称非法时会被抛出。
      * @throws \InvalidArgumentException 报头头信息的值非法的时候会被抛出。
      */
@@ -211,7 +211,7 @@ class AbstractMessage extends AbstractCommon implements MessageInterface
      * 一个新的修改过的 HTTP 消息实例。
      *
      * @param string $name 不区分大小写的头部字段名称。
-     * @return self
+     * @return static
      */
     public function withoutHeader($name)
     {
@@ -237,7 +237,7 @@ class AbstractMessage extends AbstractCommon implements MessageInterface
      * 此方法在实现的时候，**必须** 保留原有的不可修改的 HTTP 消息对象，然后返回
      * 一个新的修改过的 HTTP 消息实例。
      *
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException 当消息内容不正确的时候抛出。
      */
     public function withBody(StreamInterface $body)

@@ -7,11 +7,10 @@ namespace Hi\Http\Runtime;
 use Hi\Helpers\Json;
 use Hi\Http\Context;
 use Hi\Http\Exceptions\Handler;
-use Hi\Http\Message\Response;
 use Hi\Http\Message\ServerRequest;
 use Hi\Http\Message\UploadedFile;
 use Hi\Server\AbstructBuiltInServer;
-use InvalidArgumentException;
+use Hi\Http\Exceptions\InvalidArgumentException;
 use Throwable;
 
 /**
@@ -41,6 +40,14 @@ class BuiltIn extends AbstructBuiltInServer
             $response = Handler::reportAndprepareResponse($e);
         }
 
+        // HTTP statusCode
+        header($_SERVER['SERVER_PROTOCOL'] . ' ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
+
+        // 发送 header 头信息
+        foreach ($response->getHeaders() as $name => $value) {
+            header($name . ' ' . implode(', ', $value));
+        }
+
         echo (string) $response->getBody();
     }
 
@@ -66,7 +73,7 @@ class BuiltIn extends AbstructBuiltInServer
 
         foreach ($_FILES as $upload) {
             if (is_array($upload['error'])) {
-                throw new InvalidArgumentException('不支持以 key 数组方式上传文件');
+                throw new InvalidArgumentException('不支持以 key 数组方式上传文件', 400);
             }
             $files[] = new UploadedFile($upload['tmp_name'], $upload['size'], $upload['error'], $upload['name'], $upload['type']);
         }

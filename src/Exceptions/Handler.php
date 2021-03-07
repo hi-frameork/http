@@ -27,9 +27,11 @@ class Handler
             $data['addition'] = $e->getAddition();
         }
 
-        $response = new Response();
-        $response->withStatus($status);
-        $response->withHeader('Content-Type', 'application/json');
+        $response = (new Response())
+            ->withStatus($status)
+            ->withHeader('Content-Type', 'application/json')
+        ;
+
         $response->getBody()->write(Json::encode($data));
 
         return $response;

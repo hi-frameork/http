@@ -10,4 +10,8 @@ $app->get('/', function () {
     return 'Hi, framework!';
 });
 
+$app->get('/abc', function () {
+    throw new \RuntimeException('RuntimeException');
+});
+
 $app->listen();
