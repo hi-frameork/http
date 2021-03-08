@@ -1,6 +1,7 @@
 <?php
 
 use Hi\Http\Application;
+use Hi\Http\Context;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -10,8 +11,9 @@ $app->get('/', function () {
     return 'Hi, framework!';
 });
 
-$app->get('/abc', function () {
-    throw new \RuntimeException('RuntimeException');
+
+$app->post('/server', function (Context $ctx) {
+    return json_encode($ctx->request->getServerParams());
 });
 
 $app->listen();

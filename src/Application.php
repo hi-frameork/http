@@ -2,7 +2,7 @@
 
 namespace Hi\Http;
 
-use Hi\Http\Runtime\RuntimeFactory;
+use Hi\Http\Runtime\AdapterFactory as RuntimeFactory;
 use Hi\Http\Middleware\MiddlewareInterface;
 use InvalidArgumentException;
 use Throwable;

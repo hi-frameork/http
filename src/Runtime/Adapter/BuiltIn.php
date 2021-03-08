@@ -1,16 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Hi\Http\Runtime;
+namespace Hi\Http\Runtime\Adapter;
 
 use Hi\Helpers\Json;
 use Hi\Http\Context;
 use Hi\Http\Exceptions\Handler;
 use Hi\Http\Message\ServerRequest;
-use Hi\Http\Message\UploadedFile;
 use Hi\Server\AbstructBuiltInServer;
-use Hi\Http\Exceptions\InvalidArgumentException;
+use Hi\Http\Runtime\RuntimeTrait;
 use Throwable;
 
 /**
@@ -18,6 +15,8 @@ use Throwable;
  */
 class BuiltIn extends AbstructBuiltInServer
 {
+    use RuntimeTrait;
+
     public function start(int $port = 9527, string $host = '127.0.0.1'): void
     {
         if ('cli' === php_sapi_name()) {
@@ -40,72 +39,43 @@ class BuiltIn extends AbstructBuiltInServer
             $response = Handler::reportAndprepareResponse($e);
         }
 
-        // HTTP statusCode
-        header($_SERVER['SERVER_PROTOCOL'] . ' ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
-
         // 发送 header 头信息
         foreach ($response->getHeaders() as $name => $value) {
-            header($name . ' ' . implode(', ', $value));
+            header($name . ': ' . implode(', ', $value));
         }
+
+        // HTTP statusCode
+        header(
+            $_SERVER['SERVER_PROTOCOL'] . ' ' . 
+            $response->getStatusCode() . ' ' . 
+            $response->getReasonPhrase()
+        );
 
         echo (string) $response->getBody();
     }
 
     protected function createServerRequest()
     {
+        $headers = $this->parseHeaders();
+
         return new ServerRequest(
             $_SERVER['REQUEST_METHOD'],
-            $_SERVER['REQUEST_URI'],
+            $_SERVER['SCRIPT_NAME'],
             $_SERVER,
             'php://input',
-            $this->parseHeaders(),
+            $headers,
             $_COOKIE,
             $_GET,
-            $this->parseUploadFiles(),
-            $this->parseBody($_SERVER['REQUEST_METHOD']),
+            $this->processUploadFiles($_FILES),
+            $this->parseBody($headers['CONTENT-TYPE'] ?? ''),
             trim(strstr($_SERVER['SERVER_PROTOCOL'], '/'), '/')
         );
-    }
-
-    protected function parseUploadFiles(): array
-    {
-        $files = [];
-
-        foreach ($_FILES as $upload) {
-            if (is_array($upload['error'])) {
-                throw new InvalidArgumentException('不支持以 key 数组方式上传文件', 400);
-            }
-            $files[] = new UploadedFile($upload['tmp_name'], $upload['size'], $upload['error'], $upload['name'], $upload['type']);
-        }
-
-        return $files;
-    }
-
-    protected function parseBody($method)
-    {
-        switch ($method) {
-            case 'POST':
-                return $_POST;
-                break;
-
-            case 'PUT':
-                $content = file_get_contents('php://input');
-                // FIXME 请求为 application/x-www-form-urlencoded
-                parse_str($content, $result);
-                if ($result) {
-                    return $result;
-                }
-                // FIXME 请求为 application/json
-                return Json::decode($content, true);
-                break;
-        }
-
-        return [];
     }
 
     protected function parseHeaders(): array
     {
         $headers = [];
+
         // 从 SERVER 中提取 header 信息
         foreach ($_SERVER as $key => $value) {
             switch (true) {
@@ -118,5 +88,25 @@ class BuiltIn extends AbstructBuiltInServer
         }
 
         return $headers;
+    }
+
+    protected function parseBody($contentType): array
+    {
+        if ($_POST) {
+            return $_POST;
+        }
+
+        switch ($contentType) {
+            case 'application/json':
+                return Json::decode(file_get_contents('php://input'), true);
+                break;
+
+            case 'application/x-www-form-urlencoded':
+                parse_str(file_get_contents('php://input'), $result);
+                return $result;
+                break;
+        }
+
+        return [];
     }
 }
