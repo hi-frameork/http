@@ -22,8 +22,8 @@
     "require": {
         "php": ">=7.2",
         "psr/http-message": "^1.0",
-        "hi/helpers": "dev-main",
-        "hi/server": "dev-main"
+        "hi/helpers": "^0.0",
+        "hi/server": "^0.0"
     },
     "require-dev": {
         "swoole/ide-helper": "^4.4",
