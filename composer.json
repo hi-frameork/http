@@ -1,11 +1,11 @@
 {
     "name": "hi/http",
-    "description": "Hi 框架 和他谈拍",
+    "description": "Hi \u6846\u67b6 \u548c\u4ed6\u8c08\u62cd",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "热心网友",
+            "name": "\u70ed\u5fc3\u7f51\u53cb",
             "email": "anoxia@engineer.com"
         }
     ],
@@ -25,11 +25,11 @@
         "hi/helpers": "dev-main",
         "hi/server": "dev-main"
     },
-    "scripts": {
-        "test": "php ./vendor/bin/phpunit"
-    },
     "require-dev": {
         "swoole/ide-helper": "^4.4",
-        "workerman/workerman": "^4.0"
+        "workerman/workerman": "^4.0",
+        "codeception/codeception": "^4.1",
+        "codeception/module-phpbrowser": "^1.0.0",
+        "codeception/module-asserts": "^1.0.0"
     }
 }
