@@ -6,7 +6,7 @@ use Hi\Http\Runtime\Adapter\BuiltIn;
 use Hi\Http\Runtime\Adapter\Fpm;
 use Hi\Http\Runtime\Adapter\Swoole;
 use Hi\Http\Runtime\Adapter\Workerman;
-use Hi\Server\AbstructServer;
+use Hi\Server\AbstractServer;
 use RuntimeException;
 
 /**
@@ -52,7 +52,7 @@ class AdapterFactory
      *
      * @param array $config http server 运行配置
      */
-    public static function createInstance(array $config = []): AbstructServer
+    public static function createInstance(array $config = []): AbstractServer
     {
         $runtimeType = $config['runtime'] ?? static::BUILT_IN;
 

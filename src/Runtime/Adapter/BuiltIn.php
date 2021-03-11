@@ -6,18 +6,21 @@ use Hi\Helpers\Json;
 use Hi\Http\Context;
 use Hi\Http\Exceptions\Handler;
 use Hi\Http\Message\ServerRequest;
-use Hi\Server\AbstructBuiltInServer;
 use Hi\Http\Runtime\RuntimeTrait;
+use Hi\Server\AbstractBuiltInServer;
 use Throwable;
 
 /**
  * PHP 内建 Webserver
  */
-class BuiltIn extends AbstructBuiltInServer
+class BuiltIn extends AbstractBuiltInServer
 {
     use RuntimeTrait;
 
-    public function start(int $port = 9527, string $host = '127.0.0.1'): void
+    /**
+     * 启动 HTTP 服务或处理客户端请求
+     */
+    public function start(int $port = 9527, string $host = '127.0.0.1')
     {
         if ('cli' === php_sapi_name()) {
             $this->processPort($port);
@@ -28,6 +31,9 @@ class BuiltIn extends AbstructBuiltInServer
         }
     }
 
+    /**
+     * 处理 HTTP 请求
+     */
     protected function handle()
     {
         try {
@@ -39,7 +45,7 @@ class BuiltIn extends AbstructBuiltInServer
             $response = Handler::reportAndprepareResponse($e);
         }
 
-        // 发送 header 头信息
+        // 设置响应 header 信息
         foreach ($response->getHeaders() as $name => $value) {
             header($name . ': ' . implode(', ', $value));
         }
@@ -54,6 +60,9 @@ class BuiltIn extends AbstructBuiltInServer
         echo (string) $response->getBody();
     }
 
+    /**
+     * 返回 Server Request 参数包装对象
+     */
     protected function createServerRequest()
     {
         $headers = $this->parseHeaders();
@@ -72,6 +81,9 @@ class BuiltIn extends AbstructBuiltInServer
         );
     }
 
+    /**
+     * 解析客户端 headers
+     */
     protected function parseHeaders(): array
     {
         $headers = [];
@@ -90,6 +102,9 @@ class BuiltIn extends AbstructBuiltInServer
         return $headers;
     }
 
+    /**
+     * 解析客户端请求 body
+     */
     protected function parseBody($contentType): array
     {
         if ($_POST) {

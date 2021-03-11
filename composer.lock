@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae6fa0388181079fdf06b6d9c671b671",
+    "content-hash": "97a060aa7d232f2ab564abdfd065500a",
     "packages": [
         {
             "name": "hi/helpers",
@@ -18,7 +18,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/hi-frameork/helpers/zipball/394ec77b7079af7f7ee5ed97226efbd2def527ad",
                 "reference": "394ec77b7079af7f7ee5ed97226efbd2def527ad",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=7.2"
@@ -56,29 +62,41 @@
         },
         {
             "name": "hi/server",
-            "version": "dev-develop",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/server.git",
-                "reference": "68b19a87d49ef401e83bf6542b5d40bca370522d"
+                "reference": "8f4ead46f350471c28438ca161770d3d75152986"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/server/zipball/68b19a87d49ef401e83bf6542b5d40bca370522d",
-                "reference": "68b19a87d49ef401e83bf6542b5d40bca370522d",
-                "shasum": ""
+                "url": "https://api.github.com/repos/hi-frameork/server/zipball/8f4ead46f350471c28438ca161770d3d75152986",
+                "reference": "8f4ead46f350471c28438ca161770d3d75152986",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=7.2"
             },
             "require-dev": {
+                "codeception/codeception": "^4.1",
+                "codeception/module-asserts": "^1.0.0",
+                "codeception/module-phpbrowser": "^1.0.0",
                 "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^8.5",
                 "swoole/ide-helper": "^4.6",
                 "workerman/workerman": "^4.0"
             },
             "suggest": {
-                "ext-swoole": "使用 Swoole 获取更高地服务性能"
+                "ext-swoole": "使用 Swoole 获取更高性能",
+                "workerman/workerman": "以 Workerman 作为运行容器，提升服务性能"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -98,9 +116,9 @@
             "description": "Hi 框架 Server 组件",
             "support": {
                 "issues": "https://github.com/hi-frameork/server/issues",
-                "source": "https://github.com/hi-frameork/server/tree/develop"
+                "source": "https://github.com/hi-frameork/server/tree/main"
             },
-            "time": "2021-03-08T11:00:41+00:00"
+            "time": "2021-03-11T10:51:03+00:00"
         },
         {
             "name": "psr/http-message",
@@ -114,7 +132,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
                 "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.0"
@@ -169,7 +193,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/swoole/ide-helper/zipball/3292fef367a340ffd7b55ec806184d2268379d4a",
                 "reference": "3292fef367a340ffd7b55ec806184d2268379d4a",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "~6.5.0",
@@ -207,7 +237,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/walkor/Workerman/zipball/af6025976fba817eeb4d5fbf8d0c1059a5819da3",
                 "reference": "af6025976fba817eeb4d5fbf8d0c1059a5819da3",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3"

@@ -6,14 +6,14 @@ use Hi\Http\Context;
 use Hi\Http\Exceptions\Handler;
 use Hi\Http\Message\ServerRequest;
 use Hi\Http\Runtime\RuntimeTrait;
-use Hi\Server\AbstructWorkermanServer;
-use Throwable;
+use Hi\Server\AbstractWorkermanServer;
 use Workerman\Connection\TcpConnection;
 use Workerman\Protocols\Http\Request as WorkerRequest;
 use Workerman\Protocols\Http\Response as WorkerResponse;
 use Workerman\Worker;
+use Throwable;
 
-class Workerman extends AbstructWorkermanServer
+class Workerman extends AbstractWorkermanServer
 {
     use RuntimeTrait;
 
@@ -22,16 +22,16 @@ class Workerman extends AbstructWorkermanServer
      */
     protected $socketName = '';
 
+    /**
+     * @var array
+     */
     protected $eventHandle = [
         'onMessage',
-        'onWorkerStart',
     ];
 
-    public function onWorkerStart()
-    {
-        echo "Workerman http server is started at {$this->socketName}\n";
-    }
-
+    /**
+     * HTTP 请求处理
+     */
     public function onMessage(TcpConnection $connection, WorkerRequest $workerRequest)
     {
         try {
@@ -43,6 +43,7 @@ class Workerman extends AbstructWorkermanServer
             $response = Handler::reportAndprepareResponse($e);
         }
 
+        // 响应数据给客户端
         $connection->send(new WorkerResponse(
             $response->getStatusCode(),
             $response->getHeaders(),
@@ -50,7 +51,10 @@ class Workerman extends AbstructWorkermanServer
         ));
     }
 
-    protected function createServerRequest(WorkerRequest $request)
+    /**
+     * 返回包装客户端请求参数 ServerRequest 对象
+     */
+    protected function createServerRequest(WorkerRequest $request): ServerRequest
     {
         $rawBody = $request->rawBody();
 
@@ -68,12 +72,18 @@ class Workerman extends AbstructWorkermanServer
         );
     }
 
+    /**
+     * 为 workerman 生成服务协议
+     */
     protected function processSocketName()
     {
         $this->socketName = "http://{$this->host}:{$this->port}";
     }
 
-    protected function createServer()
+    /**
+     * 返回 HTTP 服务实例
+     */
+    protected function createServer(): Worker
     {
         $this->processSocketName();
         return new Worker($this->socketName);

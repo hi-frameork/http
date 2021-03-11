@@ -87,7 +87,7 @@ class Application
     /**
      * 监听指定端口并启动 HTTP 服务
      */
-    public function listen(int $port = 9527, string $host = '127.0.0.1'): void
+    public function listen(int $port = 9527, string $host = '127.0.0.1')
     {
         $this->registerBuiltInMiddleware();
 
