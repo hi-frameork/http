@@ -84,7 +84,7 @@ class BuiltIn extends AbstractBuiltInServer
 
         return new ServerRequest(
             $_SERVER['REQUEST_METHOD'],
-            $_SERVER['SCRIPT_NAME'],
+            $_SERVER['REQUEST_URI'],
             $_SERVER,
             'php://input',
             $headers,
