@@ -32,7 +32,7 @@ class Swoole extends AbstractSwooleServer
      */
     public function onStart()
     {
-        echo "Swoole http server is started at http://127.0.0.1:{$this->port}\n";
+        echo "Swoole http server is started at http://127.0.0.1:{$this->port()}\n";
     }
 
     /**
@@ -86,6 +86,6 @@ class Swoole extends AbstractSwooleServer
      */
     protected function createServer(): Server
     {
-        return new Server($this->host, $this->port);
+        return new Server($this->host(), $this->port());
     }
 }

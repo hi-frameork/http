@@ -77,7 +77,7 @@ class Workerman extends AbstractWorkermanServer
      */
     protected function processSocketName()
     {
-        $this->socketName = "http://{$this->host}:{$this->port}";
+        $this->socketName = "http://{$this->host()}:{$this->port()}";
     }
 
     /**
