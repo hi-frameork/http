@@ -13,6 +13,8 @@ use Workerman\Protocols\Http\Response as WorkerResponse;
 use Workerman\Worker;
 use Throwable;
 
+use function call_user_func;
+
 class Workerman extends AbstractWorkermanServer
 {
     use RuntimeTrait;

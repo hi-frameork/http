@@ -12,6 +12,11 @@ use Swoole\Http\Response as SwooleResponse;
 use Swoole\Http\Server;
 use Throwable;
 
+use function call_user_func;
+use function implode;
+use function trim;
+use function strstr;
+
 /**
  * Swoole 服务运行容器
  */

@@ -10,6 +10,17 @@ use Hi\Http\Runtime\RuntimeTrait;
 use Hi\Server\AbstractBuiltInServer;
 use Throwable;
 
+use function php_sapi_name;
+use function call_user_func;
+use function ob_clean;
+use function header;
+use function implode;
+use function trim;
+use function strstr;
+use function stripos;
+use function str_ireplace;
+use function parse_str;
+
 /**
  * PHP 内建 Webserver
  */
@@ -44,6 +55,10 @@ class BuiltIn extends AbstractBuiltInServer
         } catch (Throwable $e) {
             $response = Handler::reportAndprepareResponse($e);
         }
+
+        // 清空内容缓冲区
+        // 防止以 shell 脚本启动时输出 #!/usr/bin/env php
+        ob_clean();
 
         // 设置响应 header 信息
         foreach ($response->getHeaders() as $name => $value) {
