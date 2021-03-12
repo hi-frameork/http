@@ -152,7 +152,9 @@ class Application
      */
     private function registerBuiltInMiddleware(): void
     {
-        $this->use(\Hi\Http\Middleware\DispatchMiddleware::class);
+        if (! $this->middlewares) {
+            $this->use(\Hi\Http\Middleware\DispatchMiddleware::class);
+        }
     }
 
     /**
