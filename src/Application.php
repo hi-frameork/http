@@ -120,14 +120,6 @@ class Application
     }
 
     /**
-     * 返回当前对应所使用 Router 实例
-     */
-    public function getRouter(): Router
-    {
-        return $this->router;
-    }
-
-    /**
      * 返回默认请求事件处理回调
      */
     protected function defaultRequestHandle(): callable
@@ -161,6 +153,24 @@ class Application
     private function registerBuiltInMiddleware(): void
     {
         $this->use(\Hi\Http\Middleware\DispatchMiddleware::class);
+    }
+
+    /**
+     * 返回当前对应所使用 Router 实例
+     */
+    public function getRouter(): Router
+    {
+        return $this->router;
+    }
+
+    /**
+     * 返回运行时容器实例
+     *
+     * @return \Hi\Server\ServerInterface
+     */
+    public function getRuntime()
+    {
+        return $this->runtime;
     }
 }
 
