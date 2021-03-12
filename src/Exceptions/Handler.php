@@ -19,7 +19,6 @@ class Handler
         $data = [
             'message' => $e->getMessage(),
             'code'    => $e->getCode(),
-            'line'    => $e->getLine(),
         ];
 
         // 获取异常所携带的额外信息
