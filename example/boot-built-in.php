@@ -11,7 +11,6 @@ $app->get('/', function () {
     return 'Hi, framework!';
 });
 
-
 $app->post('/server', function (Context $ctx) {
     return json_encode($ctx->request->getServerParams());
 });

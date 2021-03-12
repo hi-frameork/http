@@ -9,14 +9,14 @@ use Throwable;
 use Hi\Http\Exceptions\Handler;
 
 /**
- * @method get(string $pattern, callable $handle)
- * @method post(string $pattern, callable $handle)
- * @method put $pattern, callable $handle)
- * @method delete(string $pattern, callable $handle)
- * @method head(string $pattern, callable $handle)
- * @method options(string $pattern, callable $handle)
- * @method patch(string $pattern, callable $handle)
- * @method group(array $config)
+ * @method \Hi\Http\Router get(string $pattern, callable $handle)
+ * @method \Hi\Http\Router post(string $pattern, callable $handle)
+ * @method \Hi\Http\Router put $pattern, callable $handle)
+ * @method \Hi\Http\Router delete(string $pattern, callable $handle)
+ * @method \Hi\Http\Router head(string $pattern, callable $handle)
+ * @method \Hi\Http\Router options(string $pattern, callable $handle)
+ * @method \Hi\Http\Router patch(string $pattern, callable $handle)
+ * @method \Hi\Http\Router group(array $config)
  */
 class Application
 {
@@ -99,6 +99,9 @@ class Application
         ;
     }
 
+    /**
+     * 设置服务事件回调
+     */
     public function set(string $event, $handle)
     {
         switch ($event) {
@@ -113,10 +116,20 @@ class Application
             case 'handleNotFound':
                 $this->router->notFound($handle);
                 break;
-
         }
     }
 
+    /**
+     * 返回当前对应所使用 Router 实例
+     */
+    public function getRouter(): Router
+    {
+        return $this->router;
+    }
+
+    /**
+     * 返回默认请求事件处理回调
+     */
     protected function defaultRequestHandle(): callable
     {
         return function (Context $ctx) {
