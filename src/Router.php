@@ -37,7 +37,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function get(string $pattern, callable $handle, $extend = null)
+    public function get(string $pattern, $handle, $extend = null)
     {
         $this->mount('GET', $pattern, $handle, $extend);
         return $this;
@@ -49,7 +49,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function post(string $pattern, callable $handle, $extend = null)
+    public function post(string $pattern, $handle, $extend = null)
     {
         $this->mount('POST', $pattern, $handle, $extend);
         return $this;
@@ -61,7 +61,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function put(string $pattern, callable $handle, $extend = null)
+    public function put(string $pattern, $handle, $extend = null)
     {
         $this->mount('PUT', $pattern, $handle, $extend);
         return $this;
@@ -73,7 +73,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function delete(string $pattern, callable $handle, $extend = null)
+    public function delete(string $pattern, $handle, $extend = null)
     {
         $this->mount('DELETE', $pattern, $handle, $extend);
         return $this;
@@ -85,7 +85,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function head(string $pattern, callable $handle, $extend = null)
+    public function head(string $pattern, $handle, $extend = null)
     {
         $this->mount('HEAD', $pattern, $handle, $extend);
         return $this;
@@ -97,7 +97,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function options(string $pattern, callable $handle, $extend = null)
+    public function options(string $pattern, $handle, $extend = null)
     {
         $this->mount('OPTIONS', $pattern, $handle, $extend);
         return $this;
@@ -109,7 +109,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function patch(string $pattern, callable $handle, $extend = null)
+    public function patch(string $pattern, $handle, $extend = null)
     {
         $this->mount('PATCH', $pattern, $handle, $extend);
         return $this;
