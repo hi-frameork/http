@@ -10,7 +10,7 @@ interface RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function get(string $pattern, callable $handle, $extend = null);
+    public function get(string $pattern, $handle, $extend = null);
 
     /**
      * 注册 POST 请求路由规则
@@ -18,7 +18,7 @@ interface RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function post(string $pattern, callable $handle, $extend = null);
+    public function post(string $pattern, $handle, $extend = null);
 
     /**
      * 注册 PUT 请求路由规则
@@ -26,7 +26,7 @@ interface RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function put(string $pattern, callable $handle, $extend = null);
+    public function put(string $pattern, $handle, $extend = null);
 
     /**
      * 注册 DELETE 请求路由规则
@@ -34,7 +34,7 @@ interface RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function delete(string $pattern, callable $handle, $extend = null);
+    public function delete(string $pattern, $handle, $extend = null);
 
     /**
      * 注册 HEAD 请求路由规则
@@ -42,7 +42,7 @@ interface RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function head(string $pattern, callable $handle, $extend = null);
+    public function head(string $pattern, $handle, $extend = null);
 
     /**
      * 注册 GET 请求路由规则
@@ -50,7 +50,7 @@ interface RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function options(string $pattern, callable $handle, $extend = null);
+    public function options(string $pattern, $handle, $extend = null);
 
     /**
      * 注册 PATCH 请求路由规则
@@ -58,7 +58,7 @@ interface RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function patch(string $pattern, callable $handle, $extend = null);
+    public function patch(string $pattern, $handle, $extend = null);
 
     /**
      * 以组方式注册路由规则
