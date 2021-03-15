@@ -2,6 +2,9 @@
 
 namespace Hi\Http;
 
+use function intval;
+use function substr;
+
 class Exception extends \Exception
 {
     /**
@@ -28,7 +31,12 @@ class Exception extends \Exception
      */
     public function getStatusCode(): int
     {
-        $status = $this->code % 1000;
+        if ($this->code > 1000) {
+            $status = intval(substr((string) $this->code, 0, 3));
+        } else {
+            $status = $this->code;
+        }
+
         return ($status < 100 || $status > 599) ? 500 : $status;
     }
 
