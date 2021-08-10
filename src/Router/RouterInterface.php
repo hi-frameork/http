@@ -66,7 +66,7 @@ interface RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function group(array $routeConfig);
+    public function group(string $prefix, $handle, $extend = null);
 
     /**
      * 将 HTTP 方法挂载到路由树

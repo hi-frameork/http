@@ -24,6 +24,11 @@ class Router implements RouterInterface
     protected $prefix = '';
 
     /**
+     * @var array
+     */
+    protected $extend = [];
+
+    /**
      * Router Construct
      */
     public function __construct()
@@ -120,17 +125,14 @@ class Router implements RouterInterface
      *
      * @return $this
      */
-    public function group(array $configs)
+    public function group(string $prefix, $handle, $extend = null)
     {
-        if (empty($configs)) {
-            return;
-        }
 
-        foreach ($configs as $prefix => $item) {
-            $this->prefix = '/' . trim($prefix, '/');
-            $item($this);
-            $this->prefix = '';
-        }
+        $this->prefix = '/' . trim($prefix, '/');
+        $this->extend = $extend;
+        $handle($this);
+        $this->prefix = '';
+        $this->extend = [];
 
         return $this;
     }
@@ -141,7 +143,7 @@ class Router implements RouterInterface
     public function mount(string $method, string $pattern, $handle, $extend = null)
     {
         $pattern = $this->prefix . '/' . trim($pattern, '/');
-        $this->tree[$method . $pattern] = [$handle, $extend];
+        $this->tree[$method . $pattern] = [$handle, array_merge($this->extend, $extend)];
     }
 
     /**
