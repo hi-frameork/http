@@ -34,8 +34,8 @@ class BuiltIn extends AbstractBuiltInServer
     public function start(int $port = 9527, string $host = '127.0.0.1')
     {
         if ('cli' === php_sapi_name()) {
-            $this->processPort($port);
-            $this->processHost($host);
+            $this->port($port);
+            $this->host($host);
             $this->runHttpServer();
         } else {
             $this->handle();
