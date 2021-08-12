@@ -85,6 +85,16 @@ class Application
     }
 
     /**
+     * 批量注册中间件
+     */
+    public function uses(array $middlewares)
+    {
+        foreach ($middlewares as $middleware) {
+            $this->use($middleware);
+        }
+    }
+
+    /**
      * 监听指定端口并启动 HTTP 服务
      */
     public function listen(int $port = 9527, string $host = '127.0.0.1')
