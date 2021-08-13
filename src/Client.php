@@ -21,7 +21,7 @@ class Client
         $client->close();
 
         if ($client->statusCode != 200) {
-            throw new Exception('请求失败');
+            throw new Exception('HTTP 请求失败');
         }
 
         return Json::decode($client->body, true);
