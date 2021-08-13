@@ -3,7 +3,7 @@
 namespace Hi\Http;
 
 use Hi\Helpers\Json;
-use Swoole\Coroutine\Http\Client;
+use Swoole\Coroutine\Http\Client as SwooleClient;
 
 class Client
 {
@@ -15,7 +15,7 @@ class Client
     public static function post($addr, $path, $data)
     {
         // 发送请求
-        $client = new Client($addr['host'], $addr['port']);
+        $client = new SwooleClient($addr['host'], $addr['port']);
         $client->setHeaders(['Content-Type' => 'application/json']);
         $client->post($path, Json::encode($data));
         $client->close();
