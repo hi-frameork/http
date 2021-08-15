@@ -28,8 +28,10 @@ class Swoole extends AbstractSwooleServer
      * @var array
      */
     protected $eventHandle = [
-        'onRequest',
         'onStart',
+        'onRequest',
+        'onTask',
+        'onFinish',
     ];
 
     /**
@@ -63,6 +65,19 @@ class Swoole extends AbstractSwooleServer
         $swooleResponse->status($response->getStatusCode());
         // 响应数据给客户端
         $swooleResponse->end((string) $response->getBody());
+    }
+
+    /**
+     * @param \Swoole\Server\Task $task
+     */
+    public function onTask($server, $task)
+    {
+        $task->data->run();
+        $task->finish(0);
+    }
+
+    public function onFinish()
+    {
     }
 
     /**
