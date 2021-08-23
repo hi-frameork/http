@@ -72,12 +72,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/server.git",
-                "reference": "5c67badece66cfae1ea28f014973139424a1306e"
+                "reference": "b67d5096e42dfbf6c7ea5698eea31ce47adff84a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/server/zipball/5c67badece66cfae1ea28f014973139424a1306e",
-                "reference": "5c67badece66cfae1ea28f014973139424a1306e",
+                "url": "https://api.github.com/repos/hi-frameork/server/zipball/b67d5096e42dfbf6c7ea5698eea31ce47adff84a",
+                "reference": "b67d5096e42dfbf6c7ea5698eea31ce47adff84a",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -121,7 +121,7 @@
                 "issues": "https://github.com/hi-frameork/server/issues",
                 "source": "https://github.com/hi-frameork/server/tree/main"
             },
-            "time": "2021-08-10T14:21:46+00:00"
+            "time": "2021-08-15T12:32:05+00:00"
         },
         {
             "name": "psr/http-message",

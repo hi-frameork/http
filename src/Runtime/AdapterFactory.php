@@ -29,22 +29,22 @@ class AdapterFactory
     /**
      * 代表使用 PHP 内建 Webserver 运行
      */
-    const BUILT_IN = 1;
+    const BUILT_IN = 'builtin';
 
     /**
      * 代表以 FPM 模型运行
      */
-    const FPM = 2;
+    const FPM = 'fpm';
 
     /**
      * 代表使用 swoole 作为 http 容器运行
      */
-    const SWOOLE = 3;
+    const SWOOLE = 'swoole';
 
     /**
      * 代表使用 workerman 作为 http 容器运行
      */
-    const WORKERMAN = 4;
+    const WORKERMAN = 'workerman';
 
     /**
      * 创建 http 运行容器实例
@@ -55,9 +55,6 @@ class AdapterFactory
     public static function createInstance(array $config = []): AbstractServer
     {
         $runtimeType = $config['runtime'] ?? static::BUILT_IN;
-
-        // 标记当前环境运行时容器
-        define('SERVER_RUNTIME', $runtimeType);
 
         switch ($runtimeType) {
             case static::BUILT_IN:

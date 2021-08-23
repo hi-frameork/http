@@ -2,6 +2,7 @@
 
 namespace Hi\Http;
 
+use Closure;
 use Hi\Http\Router\RouterInterface;
 use Hi\Http\Router\Route;
 use InvalidArgumentException;
@@ -24,6 +25,11 @@ class Router implements RouterInterface
     protected $prefix = '';
 
     /**
+     * @var array
+     */
+    protected $extend = [];
+
+    /**
      * Router Construct
      */
     public function __construct()
@@ -37,7 +43,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function get(string $pattern, $handle, $extend = null)
+    public function get(string $pattern, Closure $handle, array $extend = [])
     {
         $this->mount('GET', $pattern, $handle, $extend);
         return $this;
@@ -49,7 +55,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function post(string $pattern, $handle, $extend = null)
+    public function post(string $pattern, Closure $handle, array $extend = [])
     {
         $this->mount('POST', $pattern, $handle, $extend);
         return $this;
@@ -61,7 +67,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function put(string $pattern, $handle, $extend = null)
+    public function put(string $pattern, Closure $handle, array $extend = [])
     {
         $this->mount('PUT', $pattern, $handle, $extend);
         return $this;
@@ -73,7 +79,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function delete(string $pattern, $handle, $extend = null)
+    public function delete(string $pattern, Closure $handle, array $extend = [])
     {
         $this->mount('DELETE', $pattern, $handle, $extend);
         return $this;
@@ -85,7 +91,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function head(string $pattern, $handle, $extend = null)
+    public function head(string $pattern, Closure $handle, array $extend = [])
     {
         $this->mount('HEAD', $pattern, $handle, $extend);
         return $this;
@@ -97,7 +103,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function options(string $pattern, $handle, $extend = null)
+    public function options(string $pattern, Closure $handle, array $extend = [])
     {
         $this->mount('OPTIONS', $pattern, $handle, $extend);
         return $this;
@@ -109,7 +115,7 @@ class Router implements RouterInterface
      * @param mixed $extend
      * @return $this
      */
-    public function patch(string $pattern, $handle, $extend = null)
+    public function patch(string $pattern, Closure $handle, array $extend = [])
     {
         $this->mount('PATCH', $pattern, $handle, $extend);
         return $this;
@@ -120,17 +126,14 @@ class Router implements RouterInterface
      *
      * @return $this
      */
-    public function group(array $configs)
+    public function group(string $prefix, Closure $handle, array $extend = [])
     {
-        if (empty($configs)) {
-            return;
-        }
 
-        foreach ($configs as $prefix => $item) {
-            $this->prefix = '/' . trim($prefix, '/');
-            $item($this);
-            $this->prefix = '';
-        }
+        $this->prefix = '/' . trim($prefix, '/');
+        $this->extend = $extend;
+        $handle($this);
+        $this->prefix = '';
+        $this->extend = [];
 
         return $this;
     }
@@ -138,10 +141,10 @@ class Router implements RouterInterface
     /**
      * 挂载（注册）路由至路由树
      */
-    public function mount(string $method, string $pattern, $handle, $extend = null)
+    public function mount(string $method, string $pattern, Closure $handle, array $extend = [])
     {
         $pattern = $this->prefix . '/' . trim($pattern, '/');
-        $this->tree[$method . $pattern] = [$handle, $extend];
+        $this->tree[$method . $pattern] = [$handle, array_merge($this->extend, $extend)];
     }
 
     /**
