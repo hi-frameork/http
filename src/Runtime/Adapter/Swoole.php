@@ -96,7 +96,7 @@ class Swoole extends AbstractSwooleServer
             $request->cookie ?? [],
             $request->get ?? [],
             $this->processUploadFiles($request->files ?? []),
-            $this->parseBody($request->header['content-type'] ?? '', $rawBody),
+            $this->parseBody($request->header['content-type'] ?? '', $rawBody ?? $request->post),
             trim(strstr($request->server['server_protocol'], '/'), '/')
         );
     }

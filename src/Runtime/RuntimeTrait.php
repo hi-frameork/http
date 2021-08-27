@@ -23,24 +23,24 @@ trait RuntimeTrait
         return $uploadFiles;
     }
 
-    protected function parseBody($contentType, $rawBody): array
+    protected function parseBody($contentType, $body): array
     {
-        if (is_array($rawBody) && ! $rawBody) {
-            return $rawBody;
+        if (is_array($body)) {
+            return $body;
         }
 
         switch ($contentType) {
             case 'application/json':
-                return Json::decode($rawBody, true);
+                return Json::decode($body, true);
                 break;
 
             case 'application/x-www-form-urlencoded':
-                parse_str($rawBody, $result);
+                parse_str($body, $result);
                 return $result;
                 break;
         }
 
-        return [];
+        return $body;
     }
 
     protected function createStreamBody(string $content)
