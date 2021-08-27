@@ -29,6 +29,10 @@ trait RuntimeTrait
             return $body;
         }
 
+        // 解析内容类型
+        $parts       = explode(';', $contentType);
+        $contentType = trim($parts[0] ?? '');
+
         switch ($contentType) {
             case 'application/json':
                 return Json::decode($body, true);
