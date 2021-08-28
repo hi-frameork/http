@@ -23,7 +23,7 @@ trait RuntimeTrait
         return $uploadFiles;
     }
 
-    protected function parseBody($contentType, $body): array
+    protected function parseBody($contentType, $body)
     {
         if (is_array($body)) {
             return $body;
