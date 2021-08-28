@@ -23,7 +23,7 @@ trait RuntimeTrait
         return $uploadFiles;
     }
 
-    protected function parseBody($contentType, $body)
+    protected function parseBody($contentType, $body): array
     {
         if (is_array($body)) {
             return $body;
@@ -44,7 +44,7 @@ trait RuntimeTrait
                 break;
         }
 
-        return $body;
+        return [];
     }
 
     protected function createStreamBody(string $content)
