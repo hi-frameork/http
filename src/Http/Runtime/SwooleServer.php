@@ -2,16 +2,29 @@
 
 namespace Hi\Http\Runtime;
 
-use Hi\Server\Server;
-use Swoole\Http\Server as HttpServer;
 use Hi\Http\Exception;
+use Swoole\Http\Server as HttpServer;
+use Hi\Http\Runtime;
 
-class SwooleServer extends Server
+class SwooleServer extends Runtime
 {
     /**
      * @var \Swoole\Server
      */
     protected $server;
+
+    /**
+     * Construct
+     *
+     * @param array{} $config
+     */
+    public function __construct(array $config = [])
+    {
+        parent::__construct($config);
+
+        $this->handler = new SwooleEventHandler;
+        $this->server = $this->createServer();
+    }
 
     /**
      * @inheritdoc
@@ -24,9 +37,9 @@ class SwooleServer extends Server
             );
         }
 
-        $this->server = $this->createServer();
         $this->bindEventHanle();
         $this->bindSetting();
+
         $this->server->start();
     }
 
@@ -35,12 +48,11 @@ class SwooleServer extends Server
      */
     protected function bindEventHanle(): void
     {
-        $class = new SwooleEventHandler;
-        $methods = get_class_methods($class);
+        $methods = get_class_methods($this->eventHandler);
         foreach ($methods as $method) {
-            if (substr($method, 0, 2) === 'on' && is_callable([$class, $method])) {
+            if (substr($method, 0, 2) === 'on' && is_callable([$this->eventHandler, $method])) {
                 /** @var callable $callback */
-                $callback = [$class, $method];
+                $callback = [$this->eventHandler, $method];
                 $this->server->on(lcfirst(substr($method, 2)), $callback);
             }
         }
@@ -66,6 +78,6 @@ class SwooleServer extends Server
      */
     protected function createServer(): HttpServer
     {
-        return new HttpServer($this->config->getHost(), $this->config->getPort());
+        return new HttpServer($this->config->get('host'), $this->config->get('port'));
     }
 }

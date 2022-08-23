@@ -4,12 +4,8 @@ namespace Hi\Http\Runtime;
 
 use Swoole\Http\Request;
 
-class SwooleServerRequest
+class SwooleServerRequestFactory
 {
-    public function __construct(Request $request)
-    {
-    }
-
     /**
      * 返回包装客户端请求参数 ServerRequest 对象
      */

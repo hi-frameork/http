@@ -2,18 +2,21 @@
 
 namespace Hi\Http;
 
-use Hi\Server\Server;
+use Hi\Server;
 
 abstract class Runtime extends Server
 {
-    protected $eventHandler;
+    /**
+     * @var EventHandler
+     */
+    protected $handler;
 
     /**
      * @return $this
      */
     public function withRequestHandle(callable $callback)
     {
-        $this->eventHandler->register('request', $callback);
+        $this->handler->registerRequesthandle($callback);
         return $this;
     }
 }
