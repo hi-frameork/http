@@ -9,14 +9,14 @@ abstract class Runtime extends Server
     /**
      * @var EventHandler
      */
-    protected $handler;
+    protected $eventHandler;
 
     /**
      * @return $this
      */
     public function withRequestHandle(callable $callback)
     {
-        $this->handler->registerRequesthandle($callback);
+        $this->eventHandler->registerRequesthandle($callback);
         return $this;
     }
 }

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Hi\Http;
 
-use Hi\Http\Runtime\AdapterFactory as RuntimeFactory;
-use Hi\Http\Middleware\MiddlewareInterface;
 use InvalidArgumentException;
 use Throwable;
+use Hi\Http\Middleware\MiddlewareInterface;
 use Hi\Http\Exceptions\Handler;
+use Hi\Http\Runtime\Factory as RuntimeFactory;
 
 /**
  * @method \Hi\Http\Router get(string $pattern, callable $handle)
  * @method \Hi\Http\Router post(string $pattern, callable $handle)
- * @method \Hi\Http\Router put $pattern, callable $handle)
+ * @method \Hi\Http\Router put(string $pattern, callable $handle)
  * @method \Hi\Http\Router delete(string $pattern, callable $handle)
  * @method \Hi\Http\Router head(string $pattern, callable $handle)
  * @method \Hi\Http\Router options(string $pattern, callable $handle)
@@ -52,7 +52,7 @@ class Application
      */
     public function __construct(array $config = [])
     {
-        $this->runtime = RuntimeFactory::createInstance($config);
+        $this->runtime = RuntimeFactory::createRuntime($config);
         $this->router = new Router;
 
         // 注册请求处理回调 handle

@@ -3,9 +3,9 @@
 namespace Hi\Http;
 
 use Hi\Helpers\Input;
-use Hi\Http\Message\ServerRequest;
 use Hi\Http\Message\Response;
 use Hi\Http\Router\Route;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Context
 {
@@ -15,7 +15,7 @@ class Context
     public $route;
 
     /**
-     * @var ServerRequest
+     * @var ServerRequestInterface
      */
     public $request;
 
@@ -39,7 +39,7 @@ class Context
     /**
      * Context construct.
      */
-    public function __construct(ServerRequest $request, Response $response = null)
+    public function __construct(ServerRequestInterface $request, Response $response = null)
     {
         if (! $response) {
             $response = new Response();

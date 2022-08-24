@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hi\Http\Runtime;
 
 use Hi\Http\Exception;
 use Swoole\Http\Server as HttpServer;
 use Hi\Http\Runtime;
+use Hi\Http\Runtime\EventHandler\SwooleEventHandler;
 
 class SwooleServer extends Runtime
 {
@@ -22,8 +25,8 @@ class SwooleServer extends Runtime
     {
         parent::__construct($config);
 
-        $this->handler = new SwooleEventHandler;
-        $this->server = $this->createServer();
+        $this->eventHandler = new SwooleEventHandler;
+        $this->server       = $this->createServer();
     }
 
     /**
@@ -48,13 +51,18 @@ class SwooleServer extends Runtime
      */
     protected function bindEventHanle(): void
     {
-        $methods = get_class_methods($this->eventHandler);
-        foreach ($methods as $method) {
-            if (substr($method, 0, 2) === 'on' && is_callable([$this->eventHandler, $method])) {
-                /** @var callable $callback */
-                $callback = [$this->eventHandler, $method];
-                $this->server->on(lcfirst(substr($method, 2)), $callback);
+        foreach (get_class_methods($this->eventHandler) as $method) {
+            if (substr($method, 0, 2) !== 'on') {
+                continue;
             }
+
+            /** @var callable $callback */
+            $callback = [$this->eventHandler, $method];
+            if (! is_callable($callback)) {
+                continue;
+            }
+
+            $this->server->on(lcfirst(substr($method, 2)), $callback);
         }
     }
 
@@ -63,14 +71,13 @@ class SwooleServer extends Runtime
      */
     public function bindSetting(): void
     {
-        $this->server->set(array_merge(
-            [
-                'pid_file' => $this->config->get('pid_file'),
-                'log_file' => $this->config->get('log_file'),
-                'open_cpu_affinity' => true,
-            ],
-            $this->config->get('swoole'))
-        );
+        $default = [
+            'pid_file' => $this->config->get('pid_file'),
+            'log_file' => $this->config->get('log_file'),
+            'open_cpu_affinity' => true,
+        ];
+
+        $this->server->set(array_merge($default, $this->config->get('swoole')));
     }
 
     /**

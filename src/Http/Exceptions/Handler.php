@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Hi\Http\Exceptions;
 
-use Hi\Helpers\Json;
 use Hi\Http\Exception;
 use Hi\Http\Message\Response;
 use Throwable;

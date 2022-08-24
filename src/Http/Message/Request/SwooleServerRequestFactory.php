@@ -2,6 +2,7 @@
 
 namespace Hi\Http\Runtime;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Request;
 
 class SwooleServerRequestFactory
@@ -9,22 +10,22 @@ class SwooleServerRequestFactory
     /**
      * 返回包装客户端请求参数 ServerRequest 对象
      */
-    protected function createServerRequest(Request $request): ServerRequest
+    public function createServerRequest(Request $request): ServerRequestInterface
     {
-        $rawBody = $request->rawContent();
+        // $rawBody = $request->rawContent();
 
-        return new ServerRequest(
-            $request->server,
-            $this->processUploadFiles($request->files ?? []),
-            $request->cookie ?? [],
-            $request->get ?? [],
-            $this->createStreamBody($rawBody),
-            $request->server['request_method'],
-            $request->server['path_info'],
-            $request->header ?? [],
-            $this->parseBody($request->header['content-type'] ?? '', $rawBody ?? $request->post),
-            trim(strstr($request->server['server_protocol'], '/'), '/')
-        );
+        // return new ServerRequest(
+        //     $request->server,
+        //     $this->processUploadFiles($request->files ?? []),
+        //     $request->cookie ?? [],
+        //     $request->get ?? [],
+        //     $this->createStreamBody($rawBody),
+        //     $request->server['request_method'],
+        //     $request->server['path_info'],
+        //     $request->header ?? [],
+        //     $this->parseBody($request->header['content-type'] ?? '', $rawBody ?? $request->post),
+        //     trim(strstr($request->server['server_protocol'], '/'), '/')
+        // );
     }
 
     protected function processUploadFiles(array $files): array
