@@ -153,7 +153,7 @@ class Application
                     })
                 ;
             } catch (Throwable $e) {
-                return call_user_func($this->handleThrow, $e);
+                return call_user_func($this->handleThrow, $e, $ctx->response);
             }
         };
     }
