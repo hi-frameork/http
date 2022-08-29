@@ -39,7 +39,7 @@ class SteamTest extends TestCase
         }
     }
 
-    public function testGetDefault()
+    public function testGetDefault(): void
     {
         $stream = new Stream();
         $this->assertSame(0, $stream->tell());
@@ -52,7 +52,7 @@ class SteamTest extends TestCase
         $this->assertSame($this->stream->getMetadata(), $stream->getMetadata());
     }
 
-    public function testGetMetadata()
+    public function testGetMetadata(): void
     {
         $this->assertSame('PHP', $this->stream->getMetadata('wrapper_type'));
         $this->assertSame('TEMP', $this->stream->getMetadata('stream_type'));
@@ -63,39 +63,39 @@ class SteamTest extends TestCase
         $this->assertSame(null, $this->stream->getMetadata('not-exist-key'));
     }
 
-    public function testIsWriteableAndWriteAndToString()
+    public function testIsWriteableAndWriteAndToString(): void
     {
         $this->assertTrue($this->stream->isWritable());
         $this->stream->write($content = 'content');
         $this->assertSame($content, (string) $this->stream);
     }
 
-    public function testCreateResourceThrowExceptionForStreamCannotBeOpened()
+    public function testCreateResourceThrowExceptionForStreamCannotBeOpened(): void
     {
         $this->expectException(RuntimeException::class);
         new Stream('php://fail');
     }
 
-    public function testIsEmptyStringForNotReadable()
+    public function testIsEmptyStringForNotReadable(): void
     {
         $stream = new Stream('php://output', 'w');
         $this->assertSame('', (string) $stream);
     }
 
-    public function testCloseAndGetSizeIfUnknown()
+    public function testCloseAndGetSizeIfUnknown(): void
     {
         $this->stream->close();
         $this->assertNull($this->stream->getSize());
     }
 
-    public function testDetach()
+    public function testDetach(): void
     {
         $stream = new Stream($this->defaultResource);
         $this->assertSame(stream_get_meta_data($this->defaultResource), stream_get_meta_data($stream->detach()));
         $this->assertNull($stream->getSize());
     }
 
-    public function testWriteAndGetSizeAndDetach()
+    public function testWriteAndGetSizeAndDetach(): void
     {
         $this->assertSame(0, $this->stream->getSize());
 
@@ -109,86 +109,86 @@ class SteamTest extends TestCase
         $this->assertNull($this->stream->getSize());
     }
 
-    public function testIsReadableReturnTrue()
+    public function testIsReadableReturnTrue(): void
     {
         $stream = new Stream($this->tmpFile, 'r');
         $this->assertTrue($stream->isReadable());
     }
 
-    public function testIsReadableReturnFalse()
+    public function testIsReadableReturnFalse(): void
     {
         $stream = new Stream($this->tmpFile, 'w');
         $this->assertFalse($stream->isReadable());
     }
 
-    public function testIsWriteableReturnTrue()
+    public function testIsWriteableReturnTrue(): void
     {
         $stream = new Stream($this->tmpFile, 'w');
         $this->assertTrue($stream->isWritable());
     }
 
-    public function testIsWriteableReturnFalse()
+    public function testIsWriteableReturnFalse(): void
     {
         $stream = new Stream($this->tmpFile, 'r');
         $this->assertFalse($stream->isWritable());
     }
 
-    public function testIsSeekableReturnTrue()
+    public function testIsSeekableReturnTrue(): void
     {
         $stream = new Stream($this->tmpFile, 'r');
         $this->assertTrue($stream->isSeekable());
     }
 
-    public function testIsSeekableReturnFalse()
+    public function testIsSeekableReturnFalse(): void
     {
         $stream = new Stream($this->tmpFile, 'w');
         $stream->close();
         $this->assertFalse($stream->isSeekable());
     }
 
-    public function testReadThrowExceptionForStreamIsNotReadable()
+    public function testReadThrowExceptionForStreamIsNotReadable(): void
     {
         $stream = new Stream($this->tmpFile, 'w');
         $this->expectException(RuntimeException::class);
         $stream->read(1);
     }
 
-    public function testWriteThrowExceptionForStreamIsNotWriteable()
+    public function testWriteThrowExceptionForStreamIsNotWriteable(): void
     {
         $stream = new Stream($this->tmpFile, 'r');
         $this->expectException(RuntimeException::class);
         $stream->write('content');
     }
 
-    public function testSeekThrowExceptionForInvalidResource()
+    public function testSeekThrowExceptionForInvalidResource(): void
     {
         $this->stream->close();
         $this->expectException(RuntimeException::class);
         $this->stream->seek(1);
     }
 
-    public function testTellThrowExceptionForInvalidResource()
+    public function testTellThrowExceptionForInvalidResource(): void
     {
         $this->stream->close();
         $this->expectException(RuntimeException::class);
         $this->stream->tell();
     }
 
-    public function testReadThrowExceptionForInvalidResource()
+    public function testReadThrowExceptionForInvalidResource(): void
     {
         $this->stream->close();
         $this->expectException(RuntimeException::class);
         $this->stream->read(1);
     }
 
-    public function testGetContentThrowExceptionForInvalidResource()
+    public function testGetContentThrowExceptionForInvalidResource(): void
     {
         $this->stream->close();
         $this->expectException(RuntimeException::class);
         $this->stream->getContents();
     }
 
-    public function testConstructThrowExceptionForInvalidResource()
+    public function testConstructThrowExceptionForInvalidResource(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new Stream(stream_context_create(['phar' => ['compress' => Phar::GZ]]));
