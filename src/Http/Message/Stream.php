@@ -9,6 +9,21 @@ use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 
+use function is_string;
+use function fopen;
+use function is_resource;
+use function get_resource_type;
+use function fstat;
+use function ftell;
+use function feof;
+use function fseek;
+use function strpbrk;
+use function fwrite;
+use function fread;
+use function stream_get_contents;
+use function stream_get_meta_data;
+use function array_key_exists;
+
 class Stream implements StreamInterface
 {
     /**
@@ -62,7 +77,7 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Closes the stream when the destructed.
+     * 类对象销毁时关闭流
      */
     public function __destruct()
     {
@@ -194,7 +209,7 @@ class Stream implements StreamInterface
     public function seek($offset, $whence = SEEK_SET): void
     {
         if (! $this->resource) {
-            throw new RuntimeException('流资源不可用，指针位置设置失败');
+            throw new RuntimeException('流不可用，指针位置设置失败');
         }
 
         if (! $this->isSeekable()) {
@@ -293,7 +308,7 @@ class Stream implements StreamInterface
     public function read($length): string
     {
         if (! $this->resource) {
-            throw new RuntimeException('流资源不可用，读取失败');
+            throw new RuntimeException('流不可用，读取失败');
         }
 
         if (! $this->isReadable()) {
@@ -314,6 +329,10 @@ class Stream implements StreamInterface
      */
     public function getContents(): string
     {
+        if (! $this->resource) {
+            throw new RuntimeException('流不可用，内容获取失败');
+        }
+
         if (! $this->isReadable()) {
             throw new RuntimeException('流不可读，无法获取内容');
         }
