@@ -4,26 +4,37 @@ declare(strict_types=1);
 
 namespace Hi\Http\Message;
 
+use function array_key_exists;
+
 use Exception;
+
+use function feof;
+use function fopen;
+
+use function fread;
+use function fseek;
+use function fstat;
+use function ftell;
+use function fwrite;
+use function get_resource_type;
+
 use InvalidArgumentException;
+
+use function is_resource;
+use function is_string;
+
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 
-use function is_string;
-use function fopen;
-use function is_resource;
-use function get_resource_type;
-use function fstat;
-use function ftell;
-use function feof;
-use function fseek;
-use function strpbrk;
-use function fwrite;
-use function fread;
 use function stream_get_contents;
 use function stream_get_meta_data;
-use function array_key_exists;
+use function strpbrk;
 
+/**
+ * `Psr\HttpMessage\StreamInterface` 接口实现
+ *
+ * @see https://github.com/php-fig/http-message/tree/master/src/StreamInterface.php
+ */
 class Stream implements StreamInterface
 {
     /**
@@ -96,7 +107,7 @@ class Stream implements StreamInterface
     public function __toString(): string
     {
         try {
-            if (! $this->isReadable()) {
+            if (!$this->isReadable()) {
                 return '';
             }
 
@@ -130,7 +141,7 @@ class Stream implements StreamInterface
      */
     public function detach()
     {
-        $resource = $this->resource;
+        $resource       = $this->resource;
         $this->resource = $this->size = null;
         $this->seekable = $this->readable = $this->seekable = false;
 
@@ -162,7 +173,7 @@ class Stream implements StreamInterface
      */
     public function tell(): int
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             throw new RuntimeException('流不可用，无法获取指针位置');
         }
 
@@ -208,11 +219,11 @@ class Stream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET): void
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             throw new RuntimeException('流不可用，指针位置设置失败');
         }
 
-        if (! $this->isSeekable()) {
+        if (!$this->isSeekable()) {
             throw new RuntimeException('流指针不可设置位置');
         }
 
@@ -244,7 +255,7 @@ class Stream implements StreamInterface
             return $this->writeable;
         }
 
-        if (! is_string($mode = $this->getMetadata('mode'))) {
+        if (!is_string($mode = $this->getMetadata('mode'))) {
             return $this->writeable = false;
         }
 
@@ -260,11 +271,11 @@ class Stream implements StreamInterface
      */
     public function write($string): int
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             throw new RuntimeException('流可不用，写入失败');
         }
 
-        if (! $this->isWritable()) {
+        if (!$this->isWritable()) {
             throw new RuntimeException('流不可写');
         }
 
@@ -288,7 +299,7 @@ class Stream implements StreamInterface
             return $this->readable;
         }
 
-        if (! is_string($mode = $this->getMetadata('mode'))) {
+        if (!is_string($mode = $this->getMetadata('mode'))) {
             return $this->readable = false;
         }
 
@@ -307,11 +318,11 @@ class Stream implements StreamInterface
      */
     public function read($length): string
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             throw new RuntimeException('流不可用，读取失败');
         }
 
-        if (! $this->isReadable()) {
+        if (!$this->isReadable()) {
             throw new RuntimeException('流可不读');
         }
 
@@ -329,11 +340,11 @@ class Stream implements StreamInterface
      */
     public function getContents(): string
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             throw new RuntimeException('流不可用，内容获取失败');
         }
 
-        if (! $this->isReadable()) {
+        if (!$this->isReadable()) {
             throw new RuntimeException('流不可读，无法获取内容');
         }
 
@@ -357,7 +368,7 @@ class Stream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             return $key ? null : [];
         }
 

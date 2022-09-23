@@ -3,4 +3,8 @@
 !.git
 !.gitignore
 
+composer
 /vendor
+
+.php-cs-fixer.cache
+!.php-cs-fixer.dist.php

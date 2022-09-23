@@ -27,9 +27,9 @@ class SteamTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->tmpFile = tempnam(sys_get_temp_dir(), 'hi-http');
+        $this->tmpFile         = tempnam(sys_get_temp_dir(), 'hi-http');
         $this->defaultResource = fopen('php://temp', 'r');
-        $this->stream = new Stream('php://temp', 'w+b');
+        $this->stream          = new Stream('php://temp', 'w+b');
     }
 
     protected function tearDown(): void

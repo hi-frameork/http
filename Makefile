@@ -21,7 +21,7 @@ dev:
 ## unit-test: 单元测试
 .PHONY: unit-test
 unit-test: info
-	@docker run --rm -v `pwd`:/app $(RUNTIME_IMAGE) sh /app/tests/run-test.sh
+	@docker run --rm -v `pwd`:/app $(RUNTIME_IMAGE) sh /app/tests/run.sh
 
 info:
 	@echo "> 环境信息"
