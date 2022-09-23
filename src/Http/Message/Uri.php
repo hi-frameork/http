@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hi\Http\Message;
 
 use function get_class;

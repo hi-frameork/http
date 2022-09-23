@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hi\Tests\Http\Message;
 
 use Hi\Http\Message\Stream;

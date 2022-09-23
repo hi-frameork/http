@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hi\Tests\Http\Message;
 
 use function array_merge;
