@@ -4,26 +4,27 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9c110f457fe2d475d851a2f7677f3b9",
+    "content-hash": "9c8153da1ad9307e366107ccd9242850",
     "packages": [
         {
             "name": "hi/server",
-            "version": "0.0.2",
+            "version": "0.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/server.git",
-                "reference": "7e7a9102add120bf7b4b602799d5f5558a7bf5ac"
+                "reference": "2e51aa8470b61d3c4960e71d570d57a7c77e4bed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/server/zipball/7e7a9102add120bf7b4b602799d5f5558a7bf5ac",
-                "reference": "7e7a9102add120bf7b4b602799d5f5558a7bf5ac",
+                "url": "https://api.github.com/repos/hi-frameork/server/zipball/2e51aa8470b61d3c4960e71d570d57a7c77e4bed",
+                "reference": "2e51aa8470b61d3c4960e71d570d57a7c77e4bed",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4"
             },
             "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.11",
                 "phpstan/phpstan": "^1.8",
                 "phpunit/phpunit": "^9.5",
                 "swoole/ide-helper": "4.8",
@@ -51,9 +52,9 @@
             "description": "Hi 框架组件，提供 Server 基础抽象能力",
             "support": {
                 "issues": "https://github.com/hi-frameork/server/issues",
-                "source": "https://github.com/hi-frameork/server/tree/0.0.2"
+                "source": "https://github.com/hi-frameork/server/tree/0.0.3"
             },
-            "time": "2022-08-23T08:30:56+00:00"
+            "time": "2022-09-23T14:57:43+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1505,16 +1506,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.5",
+            "version": "1.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "f6598a5ff12ca4499a836815e08b4d77a2ddeb20"
+                "reference": "c386ab2741e64cc9e21729f891b28b2b10fe6618"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f6598a5ff12ca4499a836815e08b4d77a2ddeb20",
-                "reference": "f6598a5ff12ca4499a836815e08b4d77a2ddeb20",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c386ab2741e64cc9e21729f891b28b2b10fe6618",
+                "reference": "c386ab2741e64cc9e21729f891b28b2b10fe6618",
                 "shasum": ""
             },
             "require": {
@@ -1544,7 +1545,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.5"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.6"
             },
             "funding": [
                 {
@@ -1560,7 +1561,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-07T16:05:32+00:00"
+            "time": "2022-09-23T09:54:39+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3141,16 +3142,16 @@
         },
         {
             "name": "swoole/ide-helper",
-            "version": "5.0.0",
+            "version": "4.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swoole/ide-helper.git",
-                "reference": "939352ede9e8cddce96897d18b4fbd0c1e2110a3"
+                "reference": "afe3a09f8c49a6011e2206a03e55e391d97d81b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/939352ede9e8cddce96897d18b4fbd0c1e2110a3",
-                "reference": "939352ede9e8cddce96897d18b4fbd0c1e2110a3",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/afe3a09f8c49a6011e2206a03e55e391d97d81b0",
+                "reference": "afe3a09f8c49a6011e2206a03e55e391d97d81b0",
                 "shasum": ""
             },
             "type": "library",
@@ -3167,7 +3168,7 @@
             "description": "IDE help files for Swoole.",
             "support": {
                 "issues": "https://github.com/swoole/ide-helper/issues",
-                "source": "https://github.com/swoole/ide-helper/tree/5.0.0"
+                "source": "https://github.com/swoole/ide-helper/tree/4.8.12"
             },
             "funding": [
                 {
@@ -3179,7 +3180,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-10T05:32:06+00:00"
+            "time": "2022-09-22T16:31:12+00:00"
         },
         {
             "name": "symfony/console",

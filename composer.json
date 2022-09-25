@@ -19,13 +19,13 @@
 	},
 	"require": {
 		"php": ">=7.4",
-		"hi/server": "^0.0.2",
+		"hi/server": "^0.0",
 		"psr/http-message": "^1.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^9.5",
 		"phpstan/phpstan": "^1.8",
-		"swoole/ide-helper": "^5.0",
+		"swoole/ide-helper": "^4",
 		"vimeo/psalm": "^4.26",
 		"friendsofphp/php-cs-fixer": "^3.11"
 	}

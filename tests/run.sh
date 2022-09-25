@@ -2,6 +2,8 @@
 
 cd /app
 
+# sleep 3600;
+
 # echo ""
 # echo '-> 运行 PHPStan'
 # ./vendor/bin/phpstan analyze -c phpstan.src.neon.dist --xdebug --ansi
