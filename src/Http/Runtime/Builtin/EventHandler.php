@@ -35,7 +35,7 @@ class EventHandler extends RuntimeEventHandler
         } catch (Throwable $e) {
             $response = $response->withStatus(500);
             $response->getBody()->write(
-                '<h1Internal Server Error</h1><p>' . $e->getMessage() . '</p>'
+                '<h1>Internal Server Error</h1><p>' . $e->getMessage() . '</p>'
             );
         }
 

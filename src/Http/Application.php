@@ -37,18 +37,13 @@ class Application
     protected $middlewares = [];
 
     /**
-     * 请求处理回调
-     *
-     * @var callable
-     */
-    protected $handleRequest;
-
-    /**
      * 全局异常 handle
      *
      * @var callable
      */
-    protected $handleThrow;
+    protected $throwHandle;
+
+    protected $basePath;
 
     /**
      * Application Construct.
@@ -57,16 +52,19 @@ class Application
     {
         $this->runtime       = RuntimeFactory::create($config);
         $this->router        = new Router();
-        $this->handleRequest = $this->defaultRequestHandle();
-        $this->handleThrow   = [Handler::class, 'reportAndprepareResponse'];
+        $this->handleThrow   = [Handler::class, 'prepareResponse'];
+
+        $this->runtime->withRequestHandle($this->defaultRequestHandle());
     }
 
     /**
      * 动态代理 router，路由规则注册
      */
-    public function __call(string $name, $arguments)
+    public function __call(string $name, $arguments): Application
     {
         call_user_func_array([$this->router, $name], $arguments);
+
+        return $this;
     }
 
     /**
@@ -74,7 +72,7 @@ class Application
      *
      * @param callable|MiddlewareInterface $middleware
      */
-    public function use($middleware)
+    public function use($middleware): Application
     {
         if (!is_callable($middleware) && !(new $middleware()) instanceof MiddlewareInterface) {
             throw new InvalidArgumentException(
@@ -83,39 +81,59 @@ class Application
         }
 
         $this->middlewares[] = $middleware;
+
+        return $this;
     }
 
     /**
      * 批量注册中间件
      */
-    public function uses(array $middlewares)
+    public function uses(array $middlewares): Application
     {
         foreach ($middlewares as $middleware) {
             $this->use($middleware);
         }
+
+        return $this;
     }
 
-    /**
-     * 设置服务事件回调
-     */
-    public function set(string $event, $handle)
+    public function setBasePath(string $path): Application
     {
-        switch ($event) {
-            case 'handleRequest':
-                $this->handleRequest = $handle;
+        $this->basePath = $path;
 
-                break;
+        return $this;
+    }
 
-            case 'handleThrow':
-                $this->handleThrow = $handle;
+    public function setNotFoundHandle(callable $handle): Application
+    {
+        $this->router->setNotFoundHandle($handle);
 
-                break;
+        return $this;
+    }
 
-            case 'handleNotFound':
-                $this->router->setNotFoundHandle($handle);
+    public function setThrowHandle(callable $handle): Application
+    {
+        $this->throwHandle = $handle;
 
-                break;
+        return $this;
+    }
+
+    public function setRequestHadle(callable $handle): Application
+    {
+        $this->runtime->withRequestHandle($handle);
+
+        return $this;
+    }
+
+    public function loadRoutes(array $files): Application
+    {
+        extract(['router' => $this->router]);
+
+        foreach ($files as $file) {
+            require $this->basePath . $file;
         }
+
+        return $this;
     }
 
     /**
@@ -148,10 +166,10 @@ class Application
      * 该方法在所有自定义中间件注册完毕
      * 服务启动之前进行执行注册
      */
-    private function registerBuiltInMiddleware(): void
+    protected function registerBuiltInMiddleware(): void
     {
         if (!$this->middlewares) {
-            $this->use(\Hi\Http\Middleware\DispatchMiddleware::class);
+            $this->use(\Hi\Http\Middleware\Dispatch::class);
         }
     }
 

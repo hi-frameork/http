@@ -74,6 +74,7 @@ class Server extends Bridge
             'pid_file'          => $this->config->get('pid_file'),
             'log_file'          => $this->config->get('log_file'),
             'open_cpu_affinity' => true,
+            'hook_flags'        => SWOOLE_HOOK_ALL,
         ];
 
         $this->swoole->set(array_merge($default, $this->config->get('swoole')));

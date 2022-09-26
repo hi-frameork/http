@@ -10,22 +10,15 @@ use Throwable;
 
 class Handler
 {
-    // FIXME add report logic
-    public static function reportAndprepareResponse(
+    public static function prepareResponse(
         Throwable $e,
         ServerRequestInterface $request,
         ResponseInterface $response
     ): ResponseInterface {
         $response = $response->withStatus(500);
-
-        $content = [
-            'url'     => $request->getUri()->__toString(),
-            'message' => $e->getMessage(),
-            'line'    => $e->getLine(),
-            'file'    => $e->getFile(),
-            'trace'   => $e->getTraceAsString(),
-        ];
-        $response->getBody()->write(json_encode($content));
+        $response->getBody()->write(
+            '<h1>Internal Server Error</h1><p>' . $e->getMessage() . '</p>'
+        );
 
         return $response;
     }
