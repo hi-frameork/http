@@ -102,8 +102,8 @@ class Route
      *
      * @return mixed
      */
-    public function call()
+    public function call(...$params)
     {
-        return call_user_func_array($this->handle, func_get_args());
+        return call_user_func_array($this->handle, $params);
     }
 }
