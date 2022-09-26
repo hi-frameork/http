@@ -27,6 +27,13 @@ class Context
      */
     public $response;
 
+    /**
+     * 响应内容类型
+     *
+     * @see https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Type
+     */
+    public $contentType = 'application/json';
+
     // /**
     //  * @var Input
     //  */
@@ -67,6 +74,19 @@ class Context
         if (!$condition) {
             throw new Exception($message, $status);
         }
+    }
+
+    /**
+     * 设置响应 Content-Type
+     *
+     * 使用示例：
+     *   ```php
+     *   $ctx->setContentType('text/plain');
+     *   ```
+     */
+    public function setContentType(string $type)
+    {
+        $this->contentType = $type;
     }
 
     /**
