@@ -26,7 +26,7 @@ class EventHandler extends RuntimeEventHandler
     {
         // 清空内容缓冲区
         // 防止以 shell 脚本启动时输出 #!/usr/bin/env php
-        ob_clean();
+        ob_get_level() && ob_clean();
         // 收集所有输出至缓冲区
         ob_start();
 
