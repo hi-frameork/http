@@ -57,8 +57,6 @@ class Context
 
         $this->request  = $request;
         $this->response = $response;
-
-        // $this->input = $this->processInput();
     }
 
     /**
