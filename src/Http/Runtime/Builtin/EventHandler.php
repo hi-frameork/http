@@ -76,7 +76,7 @@ class EventHandler extends RuntimeEventHandler
             $this->processUploadFiles($_FILES),
             $_COOKIE,
             $_GET,
-            $this->parseBody($headers['CONTENT-TYPE'] ?? '', $rawBody),
+            $_POST ? $_POST : ($this->parseBody($headers['CONTENT-TYPE'] ?? '', $rawBody)),
             $_SERVER['REQUEST_METHOD'],
             $_SERVER['REQUEST_URI'],
             $headers,
