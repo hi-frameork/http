@@ -24,6 +24,12 @@ class EventHandler extends RuntimeEventHandler
 {
     public function onRequest()
     {
+        // 清空内容缓冲区
+        // 防止以 shell 脚本启动时输出 #!/usr/bin/env php
+        ob_clean();
+        // 收集所有输出至缓冲区
+        ob_start();
+
         $response = new Response();
 
         try {
@@ -35,13 +41,9 @@ class EventHandler extends RuntimeEventHandler
         } catch (Throwable $e) {
             $response = $response->withStatus(500);
             $response->getBody()->write(
-                '<h1>Internal Server Error</h1><p>' . $e->getMessage() . '</p>'
+                '<h1>Internal Server Error</h1><p>event: ' . $e->getMessage() . '</p>'
             );
         }
-
-        // 清空内容缓冲区
-        // 防止以 shell 脚本启动时输出 #!/usr/bin/env php
-        ob_clean();
 
         // 设置响应 header 信息
         foreach ($response->getHeaders() as $name => $value) {
@@ -56,6 +58,9 @@ class EventHandler extends RuntimeEventHandler
         );
 
         echo (string) $response->getBody();
+
+        // 输出缓存区内容
+        ob_end_flush();
     }
 
     /**

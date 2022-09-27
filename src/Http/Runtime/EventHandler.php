@@ -81,7 +81,7 @@ abstract class EventHandler
      */
     protected function createStreamBody(string $content)
     {
-        $body = new Stream('rb+');
+        $body = new Stream('php://temp', 'rb+');
         $body->write($content);
 
         return $body;

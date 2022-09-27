@@ -27,10 +27,17 @@ class Context
      */
     public $response;
 
-    // /**
-    //  * @var Input
-    //  */
-    // public $input;
+    /**
+     * @var array
+     */
+    public $attributes;
+
+    /**
+     * 响应内容类型
+     *
+     * @see https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Type
+     */
+    public $contentType = 'application/json';
 
     /**
      * 上下文中间状态，用于在各个组件数据共享
@@ -50,8 +57,6 @@ class Context
 
         $this->request  = $request;
         $this->response = $response;
-
-        // $this->input = $this->processInput();
     }
 
     /**
@@ -70,33 +75,15 @@ class Context
     }
 
     /**
-     * 为输入参数提供快捷访问实例，在业务处理时，
-     * 直接使用 $ctx->input 属性即可获取 queryString 参数与 form data 等参数
+     * 设置响应 Content-Type
      *
-     * 注：如果 query 参数与 form data 参数存在同名参数时
-     *     form data 参数将会覆盖 query 参数，若想获取正确 query 参数
-     *     请使用 $ctx->request->queryParams() 方法手动提取
+     * 使用示例：
+     *   ```php
+     *   $ctx->setContentType('text/plain');
+     *   ```
      */
-    // private function processInput(): Input
-    // {
-    //     $dataPayload = [];
-
-    //     $queryParams = $this->request->getQueryParams();
-    //     if ($queryParams) {
-    //         $dataPayload += $queryParams;
-    //     }
-
-    //     // 此处 parsedBody 可能是 array, object, null 中的一种
-    //     // 需要手动处理为 array 格式
-    //     $parsedBody = $this->request->getParsedBody();
-    //     if (is_object($parsedBody)) {
-    //         $parsedBody = objectToArray($parsedBody);
-    //     }
-
-    //     if ($parsedBody) {
-    //         $dataPayload += $parsedBody;
-    //     }
-
-    //     return new Input($dataPayload);
-    // }
+    public function setContentType(string $type)
+    {
+        $this->contentType = $type;
+    }
 }
