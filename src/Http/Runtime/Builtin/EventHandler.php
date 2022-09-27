@@ -26,7 +26,7 @@ class EventHandler extends RuntimeEventHandler
     {
         // 清空内容缓冲区
         // 防止以 shell 脚本启动时输出 #!/usr/bin/env php
-        ob_clean();
+        ob_get_level() && ob_clean();
         // 收集所有输出至缓冲区
         ob_start();
 
@@ -76,7 +76,7 @@ class EventHandler extends RuntimeEventHandler
             $this->processUploadFiles($_FILES),
             $_COOKIE,
             $_GET,
-            $this->parseBody($headers['CONTENT-TYPE'] ?? '', $rawBody),
+            $_POST ? $_POST : ($this->parseBody($headers['CONTENT-TYPE'] ?? '', $rawBody)),
             $_SERVER['REQUEST_METHOD'],
             $_SERVER['REQUEST_URI'],
             $headers,

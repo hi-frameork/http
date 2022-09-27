@@ -37,10 +37,10 @@ class Route
      * @param callable $handle
      */
     public function __construct(
-        bool $match = false,
-        string $method = 'GET',
         string $pattern,
         $handle,
+        bool $match = false,
+        string $method = 'GET',
         $extend = null
     ) {
         $this->match   = $match;

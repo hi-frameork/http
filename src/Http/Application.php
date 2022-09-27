@@ -74,7 +74,7 @@ class Application
      */
     public function use($middleware): Application
     {
-        if (!is_callable($middleware) && !(new $middleware()) instanceof MiddlewareInterface) {
+        if (!is_callable($middleware) && !is_a($middleware, MiddlewareInterface::class, true)) {
             throw new InvalidArgumentException(
                 '中间件必须为闭包或者 MiddlewareInterface 子类'
             );
@@ -199,7 +199,6 @@ class Application
         // 注册并启动服务
         $this
             ->runtime
-            ->withRequestHandle($this->handleRequest)
             ->withHost($host)
             ->withPort($port)
             ->start()

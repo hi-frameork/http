@@ -18,7 +18,7 @@ class Context
     public $route;
 
     /**
-     * @var ServerRequestInterface
+     * @var ServerRequestInterface|ServerRequest
      */
     public $request;
 
