@@ -253,4 +253,35 @@ class ServerRequest extends Request implements ServerRequestInterface
             }
         }
     }
+
+    public function getParameter(string $source, string $name, $defaultValue = null)
+    {
+        switch ($source) {
+            case 'query':
+                return $this->queryParams[$name] ?? $defaultValue;
+
+                break;
+            case 'post':
+            case 'put':
+                return $this->parsedBody[$name] ?? $defaultValue;
+
+                break;
+            case 'header':
+                return $this->getHeaderLine($name);
+
+                break;
+            case 'server':
+                return $this->serverParams[$name] ?? $defaultValue;
+
+                break;
+            case 'attribute':
+                return $this->getAttribute($name, $defaultValue);
+
+                break;
+            case 'cookie':
+                return $this->cookieParams[$name] ?? $defaultValue;
+
+                break;
+        }
+    }
 }
