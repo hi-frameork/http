@@ -28,6 +28,11 @@ class Context
     public $response;
 
     /**
+     * @var array
+     */
+    public $attributes;
+
+    /**
      * 响应内容类型
      *
      * @see https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Type
