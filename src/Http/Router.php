@@ -162,17 +162,17 @@ class Router implements RouterInterface
 
         return isset($this->tree[$routeKey])
             ? new Route(
-                true,
-                $method,
                 $pattern,
                 $this->tree[$routeKey][0],
-                $this->tree[$routeKey][1]
+                true,
+                $method,
+                $this->tree[$routeKey][1],
             )
             : new Route(
+                $pattern,
+                $this->notFoundHandle,
                 false,
                 $method,
-                $pattern,
-                $this->notFoundHandle
             );
     }
 
