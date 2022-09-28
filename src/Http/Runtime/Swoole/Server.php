@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Hi\Http\Runtime\Swoole;
 
 use Hi\Http\Runtime\Bridge;
+use Hi\Http\Runtime\TaskInterface;
+use InvalidArgumentException;
 use RuntimeException;
 use Swoole\Http\Server as HttpServer;
 
@@ -89,5 +91,22 @@ class Server extends Bridge
             $this->config->get('host'),
             $this->config->get('port')
         );
+    }
+
+    public function task(string $taskClass, $data = null, int $delay = 0): bool
+    {
+        if (!is_a($taskClass, TaskInterface::class, true)) {
+            throw new InvalidArgumentException(
+                "Parameter \$taskClass[{$taskClass}] must implements \\Hi\\Http\\Runtime\\TaskInterface"
+            );
+        }
+
+        $this->swoole->task([
+            'class' => $taskClass,
+            'data'  => $data,
+            'delay' => $delay,
+        ]);
+
+        return true;
     }
 }

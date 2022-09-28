@@ -22,4 +22,6 @@ abstract class Bridge extends Server
 
         return $this;
     }
+
+    abstract public function task(string $taskClass, $data = null, int $delay = 0): bool;
 }

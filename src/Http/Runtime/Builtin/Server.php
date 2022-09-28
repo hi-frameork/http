@@ -9,6 +9,8 @@ use function escapeshellarg;
 use function getenv;
 
 use Hi\Http\Runtime\Bridge;
+use Hi\Http\Runtime\TaskInterface;
+use InvalidArgumentException;
 
 use function is_executable;
 use function is_file;
@@ -18,6 +20,9 @@ use function php_sapi_name;
 use function rtrim;
 use function sprintf;
 
+/**
+ * @property EventHandler $eventHandler
+ */
 class Server extends Bridge
 {
     /**
@@ -112,5 +117,16 @@ class Server extends Bridge
         }
 
         return '';
+    }
+
+    public function task(string $taskClass, $data = null, int $delay = 0): bool
+    {
+        if (!is_a($taskClass, TaskInterface::class, true)) {
+            throw new InvalidArgumentException(
+                "Parameter \$taskClass[{$taskClass}] must implements \\Hi\\Http\\Runtime\\TaskInterface"
+            );
+        }
+
+        return (new $taskClass())->execute($data);
     }
 }

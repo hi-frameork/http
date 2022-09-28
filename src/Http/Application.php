@@ -52,7 +52,7 @@ class Application
     {
         $this->runtime       = RuntimeFactory::create($config);
         $this->router        = new Router();
-        $this->handleThrow   = [Handler::class, 'prepareResponse'];
+        $this->throwHandle   = [Handler::class, 'prepareResponse'];
 
         $this->runtime->withRequestHandle($this->defaultRequestHandle());
     }
@@ -203,5 +203,10 @@ class Application
             ->withPort($port)
             ->start()
         ;
+    }
+
+    public function task(string $taskClass, $data = null, int $delay = 0)
+    {
+        return $this->runtime->task($taskClass, $data, $delay);
     }
 }
