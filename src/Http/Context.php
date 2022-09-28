@@ -6,6 +6,7 @@ namespace Hi\Http;
 
 use Exception;
 use Hi\Http\Message\Response;
+use Hi\Http\Message\ServerRequest;
 use Hi\Http\Router\Route;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -78,9 +79,9 @@ class Context
      * 设置响应 Content-Type
      *
      * 使用示例：
-     *   ```php
-     *   $ctx->setContentType('text/plain');
-     *   ```
+     * ```php
+     * $ctx->setContentType('text/plain');
+     * ```
      */
     public function setContentType(string $type)
     {
