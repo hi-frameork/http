@@ -87,5 +87,7 @@ class EventHandler extends RuntimeEventHandler
         } else {
             (new $payload['class']())->execute($payload['data'], $server, $task->id, $task->worker_id);
         }
+
+        return true;
     }
 }

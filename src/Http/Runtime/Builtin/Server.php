@@ -127,6 +127,8 @@ class Server extends Bridge
             );
         }
 
-        return (new $taskClass())->execute($data);
+        (new $taskClass())->execute($data);
+
+        return true;
     }
 }
