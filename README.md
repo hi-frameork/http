@@ -21,7 +21,7 @@ $app->use(function (Context $ctx, Closure $next) {
 });
 
 // 路由定义
-$app->get('/', fn () => 'hi');
+$app->get('/', fn () => 'hi, framework!');
 
 // 服务将会运行在 http://127.0.0.1:4000
 $app->listen(4000);
