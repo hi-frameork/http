@@ -13,6 +13,7 @@ use Hi\Http\Context;
 
 require __DIR__ . '/vendor/autoload.php';
 
+// 默认在 php-builtin 容器运行
 $app = new Application();
 
 // 注册中间件
