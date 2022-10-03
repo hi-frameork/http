@@ -48,9 +48,9 @@ class Application
     /**
      * Application Construct.
      */
-    public function __construct(array $config = [])
+    public function __construct(string $runtimeType = 'built-in', array $config = [])
     {
-        $this->runtime       = RuntimeFactory::create($config);
+        $this->runtime       = RuntimeFactory::create($runtimeType, $config);
         $this->router        = new Router();
         $this->throwHandle   = [Handler::class, 'prepareResponse'];
 

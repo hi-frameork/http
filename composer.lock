@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "hi/server",
-            "version": "0.0.3",
+            "version": "0.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hi-frameork/server.git",
-                "reference": "2e51aa8470b61d3c4960e71d570d57a7c77e4bed"
+                "reference": "233b4d0dfbf000f5687d29e38e1a73c037ea9955"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hi-frameork/server/zipball/2e51aa8470b61d3c4960e71d570d57a7c77e4bed",
-                "reference": "2e51aa8470b61d3c4960e71d570d57a7c77e4bed",
+                "url": "https://api.github.com/repos/hi-frameork/server/zipball/233b4d0dfbf000f5687d29e38e1a73c037ea9955",
+                "reference": "233b4d0dfbf000f5687d29e38e1a73c037ea9955",
                 "shasum": ""
             },
             "require": {
@@ -52,9 +52,9 @@
             "description": "Hi 框架组件，提供 Server 基础抽象能力",
             "support": {
                 "issues": "https://github.com/hi-frameork/server/issues",
-                "source": "https://github.com/hi-frameork/server/tree/0.0.3"
+                "source": "https://github.com/hi-frameork/server/tree/0.0.4"
             },
-            "time": "2022-09-23T14:57:43+00:00"
+            "time": "2022-10-03T16:55:41+00:00"
         },
         {
             "name": "psr/http-message",

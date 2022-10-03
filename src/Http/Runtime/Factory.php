@@ -9,9 +9,9 @@ use Hi\Http\Runtime\Swoole\Server as SwooleRuntime;
 
 class Factory
 {
-    public static function create(array $config = [])
+    public static function create(string $type, array $config = [])
     {
-        switch ($config['runtime'] ?? '') {
+        switch ($type) {
             case 'swoole':
                 return new SwooleRuntime($config);
 
