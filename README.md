@@ -1,6 +1,6 @@
 # 🚀 Hi 框架 http 组件
 
-超轻量 http 组件，统一 server 接口，支持在 `swoole`, `workerman`, `php-fpm`, `php-builtin` 等容器中运行。
+超轻量 http 运行时组件，支持在 `swoole`, `workerman`, `php-fpm`, `php-builtin` 等容器中运行。
 
 **使用示例：**
 
