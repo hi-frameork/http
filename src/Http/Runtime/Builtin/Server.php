@@ -121,11 +121,11 @@ class Server extends Bridge
 
     public function task(string $taskClass, $data = null, int $delay = 0): bool
     {
-        if (!is_a($taskClass, TaskInterface::class, true)) {
-            throw new InvalidArgumentException(
-                "Parameter \$taskClass[{$taskClass}] must implements \\Hi\\Http\\Runtime\\TaskInterface"
-            );
-        }
+        // if (!is_a($taskClass, TaskInterface::class, true)) {
+        //     throw new InvalidArgumentException(
+        //         "Parameter \$taskClass[{$taskClass}] must implements \\Hi\\Http\\Runtime\\TaskInterface"
+        //     );
+        // }
 
         (new $taskClass())->execute($data);
 
