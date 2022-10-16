@@ -36,7 +36,7 @@ class EventHandler extends RuntimeEventHandler
             /** @var Response $response */
             $response = call_user_func(
                 $this->handleRequest,
-                (new Context($this->createServerRequest(), $response))
+                $this->createContext($this->createServerRequest(), $response)
             );
         } catch (Throwable $e) {
             $response = $response->withStatus(500);

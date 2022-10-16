@@ -125,6 +125,13 @@ class Application
         return $this;
     }
 
+    public function setContextClass(string $class): Application
+    {
+        $this->runtime->withContextClass($class);
+
+        return $this;
+    }
+
     public function loadRoutes(array $files): Application
     {
         extract(['router' => $this->router]);

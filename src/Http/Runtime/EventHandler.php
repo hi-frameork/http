@@ -15,6 +15,8 @@ abstract class EventHandler
      */
     protected $handleRequest;
 
+    protected $contextClass = \Hi\Http\Context::class;
+
     /**
      * 注册请求业务处理回调
      *
@@ -31,6 +33,16 @@ abstract class EventHandler
     public function registerRequestHandle(callable $callback)
     {
         $this->handleRequest = $callback;
+    }
+
+    public function registerContextClass(string $class)
+    {
+        $this->contextClass = $class;
+    }
+
+    public function createContext($request, $response)
+    {
+        return new $this->contextClass($request, $response);
     }
 
     /**
