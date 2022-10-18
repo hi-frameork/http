@@ -3,10 +3,8 @@
 namespace Hi\Http;
 
 use Hi\Http\Exceptions\Handler;
-use Hi\Http\Middleware\MiddlewareInterface;
 use Hi\Http\Runtime\Bridge;
 use Hi\Http\Runtime\Factory as RuntimeFactory;
-use InvalidArgumentException;
 use Throwable;
 
 /**
@@ -70,16 +68,10 @@ class Application
     /**
      * 注册中间件
      *
-     * @param callable|MiddlewareInterface $middleware
+     * @param string $middleware
      */
     public function use($middleware): Application
     {
-        if (!is_callable($middleware) && !is_a($middleware, MiddlewareInterface::class, true)) {
-            throw new InvalidArgumentException(
-                '中间件必须为闭包或者 MiddlewareInterface 子类'
-            );
-        }
-
         $this->middlewares[] = $middleware;
 
         return $this;

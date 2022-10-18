@@ -7,7 +7,7 @@ namespace Hi\Http\Middleware;
 use Closure;
 use Hi\Http\Context;
 
-class Dispatch implements MiddlewareInterface
+class Dispatch
 {
     public function handle(Context $ctx, Closure $next)
     {
