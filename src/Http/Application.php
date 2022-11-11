@@ -3,6 +3,7 @@
 namespace Hi\Http;
 
 use Hi\Http\Exceptions\Handler;
+use Hi\Http\Router\RouterInterface;
 use Hi\Http\Runtime\Bridge;
 use Hi\Http\Runtime\Factory as RuntimeFactory;
 use Throwable;
@@ -122,6 +123,11 @@ class Application
         $this->runtime->withContextClass($class);
 
         return $this;
+    }
+
+    public function setRouter(RouterInterface $router)
+    {
+        $this->router = $router;
     }
 
     public function loadRoutes(array $files): Application
