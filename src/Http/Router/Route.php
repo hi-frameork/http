@@ -92,8 +92,12 @@ class Route
      *
      * @return mixed
      */
-    public function getExtend()
+    public function getExtend(string $name = '')
     {
+        if ($name) {
+            return $this->extend[$name];
+        }
+
         return $this->extend;
     }
 
