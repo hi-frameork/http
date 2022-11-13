@@ -125,9 +125,10 @@ class Application
         return $this;
     }
 
-    public function setRouter(RouterInterface $router)
+    public function setRouter(RouterInterface $router): Application
     {
         $this->router = $router;
+        return $this;
     }
 
     public function loadRoutes(array $files): Application

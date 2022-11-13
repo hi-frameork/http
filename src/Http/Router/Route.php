@@ -95,7 +95,7 @@ class Route
     public function getExtend(string $name = '')
     {
         if ($name) {
-            return $this->extend[$name];
+            return $this->extend[$name] ?? null;
         }
 
         return $this->extend;

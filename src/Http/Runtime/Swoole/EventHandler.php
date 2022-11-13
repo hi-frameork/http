@@ -2,12 +2,8 @@
 
 namespace Hi\Http\Runtime\Swoole;
 
-use Hi\Http\Context;
 use Hi\Http\Message\Swoole\Response;
-use Hi\Http\Message\Swoole\ServerRequest;
 use Hi\Http\Runtime\EventHandler as RuntimeEventHandler;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
 use Swoole\Server as SwooleServer;
@@ -17,6 +13,8 @@ use Throwable;
 
 class EventHandler extends RuntimeEventHandler
 {
+    use MessageHelperTrait;
+
     /**
      * Http 请求回调 handle
      */
@@ -38,35 +36,6 @@ class EventHandler extends RuntimeEventHandler
         }
 
         $response->send();
-    }
-
-    /**
-     * 生成 Request 对象
-     */
-    protected function createServerRequest(SwooleRequest $request): ServerRequestInterface
-    {
-        $rawBody = $request->rawContent();
-
-        return new ServerRequest(
-            $request->server ?? [],
-            $this->processUploadFiles($request->files),
-            $request->cookie ?? [],
-            $request->get    ?? [],
-            $request->post ? $request->post : ($this->parseBody(($request->header['content-type'] ?? ''), $rawBody)),
-            $request->server['request_method'] ?? '',
-            $request->server['path_info']      ?? '',
-            $request->header                   ?? [],
-            $this->createStreamBody($rawBody),
-            trim(strstr($request->server['server_protocol'], '/'), '/')
-        );
-    }
-
-    /**
-     * 生成 Response 对象
-     */
-    protected function createResponse(SwooleResponse $response): ResponseInterface
-    {
-        return (new Response())->withSwooleResponse($response);
     }
 
     public function onTask(SwooleServer $server, ServerTask $task)

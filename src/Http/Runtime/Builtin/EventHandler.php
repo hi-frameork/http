@@ -8,8 +8,6 @@ use function call_user_func;
 use function file_get_contents;
 use function header;
 
-use Hi\Http\Context;
-
 use Hi\Http\Message\Response;
 use Hi\Http\Message\ServerRequest;
 use Hi\Http\Runtime\EventHandler as RuntimeEventHandler;
