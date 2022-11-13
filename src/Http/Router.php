@@ -180,7 +180,7 @@ class Router implements RouterInterface
      */
     protected function routeKey($method, $pattern): string
     {
-        return $method . ':' . $pattern;
+        return $method . ':' . rtrim($pattern, '/');
     }
 
     /**
