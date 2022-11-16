@@ -20,13 +20,10 @@ class EventHandler extends RuntimeEventHandler
      */
     public function onRequest(SwooleRequest $swRequest, SwooleResponse $swResponse): void
     {
-        /** @var Response $response */
-        $response = $this->createResponse($swResponse);
-
         try {
             $response = call_user_func(
                 $this->handleRequest,
-                $this->createContext($this->createServerRequest($swRequest), $response)
+                $this->createContext($this->createServerRequest($swRequest), $this->createResponse($swResponse))
             );
         } catch (Throwable $e) {
             $response = $response->withStatus(500);
@@ -35,7 +32,16 @@ class EventHandler extends RuntimeEventHandler
             );
         }
 
-        $response->send();
+        /** @var Response $response */
+        // 设置响应 header 信息
+        foreach ($response->getHeaders() as $name => $value) {
+            $swResponse->header($name, implode(', ', $value));
+        }
+
+        // HTTP statusCode
+        $swResponse->status($response->getStatusCode());
+        // 响应数据给客户端
+        $swResponse->end($response->getBody()->__toString());
     }
 
     public function onTask(SwooleServer $server, ServerTask $task)

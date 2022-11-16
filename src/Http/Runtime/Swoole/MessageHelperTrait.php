@@ -7,8 +7,6 @@ use Hi\Http\Message\Swoole\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Request as SwooleRequest;
-use Swoole\Http\Response as SwooleResponse;
-
 
 trait MessageHelperTrait
 {
@@ -36,8 +34,8 @@ trait MessageHelperTrait
     /**
      * 生成 Response 对象
      */
-    protected function createResponse(SwooleResponse $response): ResponseInterface
+    protected function createResponse(): ResponseInterface
     {
-        return (new Response())->withSwooleResponse($response);
+        return new Response();
     }
 }
