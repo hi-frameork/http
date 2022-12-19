@@ -18,6 +18,7 @@ $app = new Application();
 
 // 注册中间件
 $app->use(fn (Context $ctx, Closure $next) => $next($ctx));
+
 // 路由定义
 $app->get('/', fn () => 'hi, framework!');
 
@@ -36,9 +37,7 @@ use Hi\Http\Context;
 require __DIR__ . '/vendor/autoload.php';
 
 (new Application())
-    ->use(function (Context $ctx, Closure $next) {
-        return $next($ctx);
-    })
+    ->use(fn (Context $ctx, Closure $next) => $next($ctx))
     ->get('/', fn () => 'hi, framework!')
     ->listen(4000)
 ;
