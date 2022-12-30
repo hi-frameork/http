@@ -2,6 +2,7 @@
 
 namespace Hi\Http\Runtime\Swoole;
 
+use Hi\Http\Message\FileResponse;
 use Hi\Http\Message\Swoole\Response;
 use Hi\Http\Runtime\EventHandler as RuntimeEventHandler;
 use Swoole\Http\Request as SwooleRequest;
@@ -29,8 +30,9 @@ class EventHandler extends RuntimeEventHandler
             );
         } catch (Throwable $e) {
             $response = $response->withStatus(500);
+            $trace    = str_replace('\n', '<br />', $e->getTraceAsString());
             $response->getBody()->write(
-                '<h1>Internal Server Error</h1><p>' . $e->getMessage() . '</p><p>' . $e->getTraceAsString() . '</p>'
+                '<h1>Internal Server Error</h1><p>' . $e->getMessage() . '</p><p>' . $trace . '</p>'
             );
         }
 
@@ -42,8 +44,13 @@ class EventHandler extends RuntimeEventHandler
 
         // HTTP statusCode
         $swResponse->status($response->getStatusCode());
+
         // 响应数据给客户端
-        $swResponse->end($response->getBody()->__toString());
+        if ($response instanceof FileResponse) {
+            $swResponse->sendfile($response->getBody()->__toString());
+        } else {
+            $swResponse->end($response->getBody()->__toString());
+        }
     }
 
     public function onTask(SwooleServer $server, ServerTask $task)

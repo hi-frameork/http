@@ -8,6 +8,7 @@ use function call_user_func;
 use function file_get_contents;
 use function header;
 
+use Hi\Http\Message\FileResponse;
 use Hi\Http\Message\Response;
 use Hi\Http\Message\ServerRequest;
 use Hi\Http\Runtime\EventHandler as RuntimeEventHandler;
@@ -55,10 +56,15 @@ class EventHandler extends RuntimeEventHandler
             $response->getReasonPhrase()
         );
 
-        echo (string) $response->getBody();
+        if ($response instanceof FileResponse) {
+            readfile($response->getBody()->__toString());
+        } else {
+            echo (string) $response->getBody();
+            // 输出缓存区内容
+            ob_end_flush();
+        }
 
-        // 输出缓存区内容
-        ob_end_flush();
+        ob_end_clean();
     }
 
     /**
