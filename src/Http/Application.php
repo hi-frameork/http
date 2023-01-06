@@ -49,9 +49,9 @@ class Application
      */
     public function __construct(string $runtimeType = 'built-in', array $config = [])
     {
-        $this->runtime       = RuntimeFactory::create($runtimeType, $config);
-        $this->router        = new Router();
-        $this->throwHandle   = [Handler::class, 'prepareResponse'];
+        $this->runtime     = RuntimeFactory::create($runtimeType, $config);
+        $this->router      = new Router();
+        $this->throwHandle = [Handler::class, 'prepareResponse'];
 
         $this->runtime->withRequestHandle($this->defaultRequestHandle());
     }
@@ -125,9 +125,17 @@ class Application
         return $this;
     }
 
+    public function setCustomProcess($process): Application
+    {
+        $this->runtime->withProcess($process);
+
+        return $this;
+    }
+
     public function setRouter(RouterInterface $router): Application
     {
         $this->router = $router;
+
         return $this;
     }
 

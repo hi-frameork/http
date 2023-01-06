@@ -40,6 +40,7 @@ class Server extends Bridge
         }
 
         $this->swoole = $this->create();
+        $this->swoole->addProcess($this->process);
 
         $this->bindEventHanle();
         $this->bindSetting();

@@ -13,6 +13,8 @@ abstract class Bridge extends Server
      */
     protected $eventHandler;
 
+    protected $process;
+
     /**
      * @return $this
      */
@@ -26,6 +28,14 @@ abstract class Bridge extends Server
     public function withContextClass(string $class)
     {
         $this->eventHandler->registerContextClass($class);
+
+        return $this;
+    }
+
+    public function withProcess($process)
+    {
+        $this->process = $process;;
+
         return $this;
     }
 
