@@ -66,10 +66,10 @@ class EventHandler extends RuntimeEventHandler
         if ($payload['delay'] > 0) {
             Timer::after(
                 $payload['delay'] * 1000,
-                fn () => (new $payload['class']())->execute($payload['data'], $server, $task->id, $task->worker_id)
+                fn () => (new $payload['class']($payload['data'], $server, $task->id, $task->worker_id))->execute()
             );
         } else {
-            (new $payload['class']())->execute($payload['data'], $server, $task->id, $task->worker_id);
+            (new $payload['class']($payload['data'], $server, $task->id, $task->worker_id))->execute();
         }
 
         return true;
