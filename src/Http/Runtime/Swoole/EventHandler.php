@@ -5,6 +5,7 @@ namespace Hi\Http\Runtime\Swoole;
 use Hi\Http\Message\FileResponse;
 use Hi\Http\Message\Swoole\Response;
 use Hi\Http\Runtime\EventHandler as RuntimeEventHandler;
+use Hi\Http\Runtime\TaskInterface;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
 use Swoole\Server as SwooleServer;
@@ -63,13 +64,21 @@ class EventHandler extends RuntimeEventHandler
             return false;
         }
 
-        if ($payload['delay'] > 0) {
-            Timer::after(
-                $payload['delay'] * 1000,
-                fn () => (new $payload['class']($payload['data'], $server, $task->id, $task->worker_id))->execute()
-            );
+        /** @var TaskInterface $handler */
+        $handler = new $payload['class']($payload['data'], $server, $task->id, $task->worker_id);
+
+        if ($handler instanceof TaskInterface) {
+            $handler->handle();
         } else {
-            (new $payload['class']($payload['data'], $server, $task->id, $task->worker_id))->execute();
+            // 兼容旧业务，后续逐步移除
+            if ($payload['delay'] > 0) {
+                Timer::after(
+                    $payload['delay'] * 1000,
+                    fn () => $handler->execute()
+                );
+            } else {
+                $handler->execute();
+            }
         }
 
         return true;

@@ -6,5 +6,5 @@ namespace Hi\Http\Runtime;
 
 interface TaskInterface
 {
-    public function execute($data = null);
+    public function handle();
 }
