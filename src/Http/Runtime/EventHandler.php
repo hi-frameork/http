@@ -40,9 +40,9 @@ abstract class EventHandler
         $this->contextClass = $class;
     }
 
-    public function createContext($request, $response)
+    public function createContext($request)
     {
-        return new $this->contextClass($request, $response);
+        return new $this->contextClass($request);
     }
 
     /**

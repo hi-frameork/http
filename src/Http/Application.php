@@ -3,6 +3,8 @@
 namespace Hi\Http;
 
 use Hi\Http\Exceptions\Handler;
+use Hi\Http\Message\JsonResponse;
+use Hi\Http\Message\Response;
 use Hi\Http\Router\RouterInterface;
 use Hi\Http\Runtime\Bridge;
 use Hi\Http\Runtime\Factory as RuntimeFactory;
@@ -165,9 +167,8 @@ class Application
                 return (new Pipeline())
                     ->send($ctx)
                     ->throgh($this->middlewares)
-                    ->then(function (Context $ctx) {
-                        return $ctx->response;
-                    });
+                    ->then(fn (Context $ctx) => $this->prepareResponse($ctx))
+                ;
             } catch (Throwable $e) {
                 return call_user_func($this->throwHandle, $e, $ctx);
             }
@@ -175,16 +176,16 @@ class Application
     }
 
     /**
-     * 注册内置中间件
-     *
-     * 该方法在所有自定义中间件注册完毕
-     * 服务启动之前进行执行注册
+     * 准备响应
      */
-    protected function registerBuiltInMiddleware(): void
+    protected function prepareResponse(Context $ctx)
     {
-        if (!$this->middlewares) {
-            $this->use(\Hi\Http\Middleware\Dispatch::class);
-        }
+        $result = $ctx->route->call($ctx);
+
+        return $result instanceof Response
+            ? $result
+            : new JsonResponse($result)
+        ;
     }
 
     /**
@@ -208,8 +209,6 @@ class Application
      */
     public function listen(int $port = 9527, string $host = '127.0.0.1')
     {
-        $this->registerBuiltInMiddleware();
-
         // 注册并启动服务
         $this
             ->runtime

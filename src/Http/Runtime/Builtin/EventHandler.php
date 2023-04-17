@@ -29,13 +29,11 @@ class EventHandler extends RuntimeEventHandler
         // 收集所有输出至缓冲区
         ob_start();
 
-        $response = new Response();
-
         try {
             /** @var Response $response */
             $response = call_user_func(
                 $this->handleRequest,
-                $this->createContext($this->createServerRequest(), $response)
+                $this->createContext($this->createServerRequest())
             );
         } catch (Throwable $e) {
             $response = $response->withStatus(500);

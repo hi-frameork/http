@@ -22,12 +22,10 @@ class EventHandler extends RuntimeEventHandler
      */
     public function onRequest(SwooleRequest $swRequest, SwooleResponse $swResponse): void
     {
-        $response = $this->createResponse();
-
         try {
             $response = call_user_func(
                 $this->handleRequest,
-                $this->createContext($this->createServerRequest($swRequest), $response)
+                $this->createContext($this->createServerRequest($swRequest))
             );
         } catch (Throwable $e) {
             $response = $response->withStatus(500);

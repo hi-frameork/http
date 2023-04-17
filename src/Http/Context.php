@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Hi\Http;
 
 use Exception;
-use Hi\Http\Message\Response;
 use Hi\Http\Message\ServerRequest;
 use Hi\Http\Router\Route;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Context
@@ -17,16 +15,6 @@ class Context
      * @var Route
      */
     public $route;
-
-    /**
-     * @var ServerRequestInterface|ServerRequest
-     */
-    public $request;
-
-    /**
-     * @var ResponseInterface
-     */
-    public $response;
 
     /**
      * @var array
@@ -41,23 +29,10 @@ class Context
     public $contentType = 'application/json';
 
     /**
-     * 上下文中间状态，用于在各个组件数据共享
-     *
-     * @var array
-     */
-    public $state = [];
-
-    /**
      * Context construct.
      */
-    public function __construct(ServerRequestInterface $request, ResponseInterface $response = null)
+    public function __construct(public ServerRequestInterface|ServerRequest $request)
     {
-        if (!$response) {
-            $response = new Response();
-        }
-
-        $this->request  = $request;
-        $this->response = $response;
     }
 
     /**
