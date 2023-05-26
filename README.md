@@ -16,9 +16,6 @@ require __DIR__ . '/vendor/autoload.php';
 // 默认在 php-builtin 容器运行
 $app = new Application();
 
-// 注册中间件
-$app->use(fn (Context $ctx, Closure $next) => $next($ctx));
-
 // 路由定义
 $app->get('/', fn () => 'hi, framework!');
 
@@ -37,7 +34,6 @@ use Hi\Http\Context;
 require __DIR__ . '/vendor/autoload.php';
 
 (new Application())
-    ->use(fn (Context $ctx, Closure $next) => $next($ctx))
     ->get('/', fn () => 'hi, framework!')
     ->listen(4000)
 ;
