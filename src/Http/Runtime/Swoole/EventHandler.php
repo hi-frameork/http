@@ -21,8 +21,16 @@ class EventHandler extends RuntimeEventHandler
     {
         if ($server->taskworker) {
             define('AppType', 'task');
+            $title = 'task worker';
         } else {
             define('AppType', 'http');
+            $title = 'http worker';
+        }
+
+        if (function_exists('cli_set_process_title')) {
+            cli_set_process_title($title);
+        } elseif (function_exists('swoole_set_process_name')) {
+            swoole_set_process_name($title);
         }
     }
 
