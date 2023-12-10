@@ -39,5 +39,10 @@ abstract class Bridge extends Server
         return $this;
     }
 
+    public function withWorkerStartHandle(callable $callback)
+    {
+        $this->eventHandler->registerWorkerStartHandle($callback);
+    }
+
     abstract public function task(string $taskClass, $data = null, int $delay = 0): bool;
 }
