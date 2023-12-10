@@ -97,10 +97,12 @@ class Server extends Bridge
 
     public function task(string $taskClass, $data = null, int $delay = 0): bool
     {
-        return $this->swoole->task([
+        $result = $this->swoole->task([
             'class' => $taskClass,
             'data'  => $data,
             'delay' => $delay,
         ]);
+
+        return $result > 0;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Hi\Http\Runtime;
 
+use Closure;
 use Hi\Http\Message\Stream;
 use Hi\Http\Message\UploadedFile;
 use InvalidArgumentException;
@@ -17,7 +18,7 @@ abstract class EventHandler
 
     protected $contextClass = \Hi\Http\Context::class;
 
-    protected ?callable $workerStartHandle = null;
+    protected ?Closure $workerStartHandle = null;
 
     /**
      * 注册请求业务处理回调
