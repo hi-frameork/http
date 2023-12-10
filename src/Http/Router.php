@@ -209,4 +209,12 @@ class Router implements RouterInterface
             return 'resource not found';
         };
     }
+
+    /**
+     * 返回路由树
+     */
+    public function getTree(): array
+    {
+        return $this->tree;
+    }
 }

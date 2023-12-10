@@ -17,6 +17,13 @@ class EventHandler extends RuntimeEventHandler
 {
     use MessageHelperTrait;
 
+    public function onWorkerStart(SwooleServer $server)
+    {
+        if ($this->workerStartHandle) {
+            call_user_func($this->workerStartHandle, $server);
+        }
+    }
+
     /**
      * Http 请求回调 handle
      */

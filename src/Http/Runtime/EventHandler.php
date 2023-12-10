@@ -2,6 +2,7 @@
 
 namespace Hi\Http\Runtime;
 
+use Closure;
 use Hi\Http\Message\Stream;
 use Hi\Http\Message\UploadedFile;
 use InvalidArgumentException;
@@ -16,6 +17,8 @@ abstract class EventHandler
     protected $handleRequest;
 
     protected $contextClass = \Hi\Http\Context::class;
+
+    protected ?Closure $workerStartHandle = null;
 
     /**
      * 注册请求业务处理回调
@@ -33,6 +36,11 @@ abstract class EventHandler
     public function registerRequestHandle(callable $callback)
     {
         $this->handleRequest = $callback;
+    }
+
+    public function registerWorkerStartHandle(callable $callback)
+    {
+        $this->workerStartHandle = $callback;
     }
 
     public function registerContextClass(string $class)
