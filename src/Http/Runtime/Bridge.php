@@ -13,7 +13,7 @@ abstract class Bridge extends Server
      */
     protected $eventHandler;
 
-    protected $process;
+    protected array $processes = [];
 
     /**
      * @return $this
@@ -34,7 +34,7 @@ abstract class Bridge extends Server
 
     public function withProcess($process)
     {
-        $this->process = $process;;
+        $this->processes[] = $process;
 
         return $this;
     }

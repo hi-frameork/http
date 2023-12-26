@@ -39,8 +39,9 @@ class Server extends Bridge
 
         $this->swoole = $this->create();
 
-        if ($this->process) {
-            $this->swoole->addProcess($this->process);
+        // 注册自定义子进程
+        foreach ($this->processes as $process) {
+            $this->swoole->addProcess($process);
         }
 
         $this->bindEventHanle();
